@@ -1,0 +1,129 @@
+{
+  "id": "e3acfd99-180e-4944-84b5-3b49d83caa6d",
+  "name": "LFS E-Way Bill Module",
+  "publisher": "Leaping Frog Solutions Pvt. Ltd.",
+  "version": "1.0.0.2",
+  "brief": "E-Way Bill Module for LFSPL",
+  "description": "This module provides E-Way Bill functionality for the LFSPL system.",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [
+    {
+      "name": "Dynamics BC Excel Reports",
+      "id": "cc11c22e-5ca3-423f-8804-88cac6d91983",
+      "version": "26.0.30643.32100",
+      "publisher": "Microsoft"
+    },
+    {
+      "name": "Fixed Asset Depreciation for India",
+      "id": "1150dd8d-51da-485a-bd4a-1ee98d78c21a",
+      "version": "26.0.30643.32695",
+      "publisher": "Microsoft"
+    },
+    {
+      "name": "India Reports",
+      "id": "050f6146-bffd-40de-942c-d0dd510ec20f",
+      "version": "26.0.30643.32100",
+      "publisher": "Microsoft"
+    },
+    {
+      "name": "Tax Engine",
+      "id": "c1eafb3f-e397-468e-bdb4-ecc5c317ca00",
+      "version": "26.0.30643.32695",
+      "publisher": "Microsoft"
+    },
+    {
+      "name": "India Tax Base",
+      "id": "d3c551dd-5903-4194-b153-04ced9d29a2c",
+      "version": "26.0.30643.32695",
+      "publisher": "Microsoft"
+    },
+    {
+      "name": "System Application",
+      "id": "63ca2fa4-4f03-4f2b-a480-172fef340d3f",
+      "version": "26.0.30643.33672",
+      "publisher": "Microsoft"
+    },
+    {
+      "name": "Business Foundation",
+      "id": "f3552374-a1f2-4356-848e-196002525837",
+      "version": "26.0.30643.32100",
+      "publisher": "Microsoft"
+    },
+    {
+      "name": "Base Application",
+      "id": "437dbf0e-84ff-417a-965d-ed2bb9650972",
+      "version": "26.0.30643.32957",
+      "publisher": "Microsoft"
+    },
+    {
+      "name": "India Charge Group",
+      "id": "07729019-DA51-4639-A987-3DB38CCC62C7",
+      "version": "26.0.30643.32695",
+      "publisher": "Microsoft"
+    },
+    {
+      "name": "E-Document Core",
+      "id": "e1d97edc-c239-46b4-8d84-6368bdf67c8b",
+      "version": "26.0.30643.32695",
+      "publisher": "Microsoft"
+    },
+    {
+      "name": "India Voucher Interface",
+      "id": "f1d9b696-156b-4251-b542-34e549fa80e9",
+      "version": "26.0.30643.32552",
+      "publisher": "Microsoft"
+    },
+    {
+      "name": "QR Generator",
+      "id": "7106d701-c601-4a5f-97c2-b8b323ae2c18",
+      "version": "26.0.30643.32695",
+      "publisher": "Microsoft"
+    },
+    {
+      "name": "India Gate Entry",
+      "id": "2dc39818-e0f0-42b6-99eb-ba29dc5f4102",
+      "version": "26.0.30643.32552",
+      "publisher": "Microsoft"
+    },
+    {
+      "name": "India GST",
+      "id": "db643212-b7fb-4dd4-b5a8-cb44ac714461",
+      "version": "26.0.30643.32442",
+      "publisher": "Microsoft"
+    },
+    {
+      "name": "India TDS",
+      "id": "eae5779e-7797-4c4c-977e-7516652b7a65",
+      "version": "26.0.30643.33284",
+      "publisher": "Microsoft"
+    },
+    {
+      "name": "India TCS",
+      "id": "eddcf82e-482c-49d1-836b-ad0284f2c5b0",
+      "version": "26.0.30643.34581",
+      "publisher": "Microsoft"
+    }
+  ],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "26.0.0.0",
+  "idRanges": [
+    {
+      "from": 73100,
+      "to": 73199
+    }
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": false,
+    "includeSourceInSymbolFile": true
+  },
+  "runtime": "15.0",
+  "features": [
+    "NoImplicitWith"
+  ]
+}

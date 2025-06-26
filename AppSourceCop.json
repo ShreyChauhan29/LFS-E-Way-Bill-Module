@@ -1,0 +1,6 @@
+{
+    "name": "LFSPL",
+    "publisher": "Leaping Frog Solution Pvt Ltd",
+    "mandatoryAffixes": [ "LFS" ],
+    "supportedCountries": ["IN"]
+}

@@ -1,0 +1,16 @@
+Setting.json :
+[
+// "al.codeAnalyzers": [
+    //     "${CodeCop}"
+    // ]
+]
+
+Check Below URL for best practise,
+https://learn.microsoft.com/en-us/dynamics365/business-central/dev-itpro/compliance/apptest-overview
+
+Use Affix (LFS) in extension objects,field extension, action extension.
+
+1. Module-Wise Object ID and Field ID :
+EXIM : 73100 - 73199
+
+2. Use Comments as the description of Works.
