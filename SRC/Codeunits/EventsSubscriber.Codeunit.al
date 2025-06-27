@@ -31,4 +31,30 @@ codeunit 73102 "LFS EventsSubscriber"
         SalesInvoiceHeader.Modify();
     end;
 
+    [EventSubscriber(ObjectType::Page, Page::"Pstd. Sales Cr. Memo - Update", OnAfterRecordChanged, '', false, false)]
+    local procedure "Pstd. Sales Cr. Memo - Update_OnAfterRecordChanged"(var SalesCrMemoHeader: Record "Sales Cr.Memo Header"; xSalesCrMemoHeader: Record "Sales Cr.Memo Header"; var IsChanged: Boolean)
+    begin
+        IsChanged :=
+            (SalesCrMemoHeader."Vehicle No." <> xSalesCrMemoHeader."Vehicle No.") or
+            (SalesCrMemoHeader."Vehicle Type" <> xSalesCrMemoHeader."Vehicle Type") or
+            (SalesCrMemoHeader."LFS Mode of Transport" <> xSalesCrMemoHeader."LFS Mode of Transport") or
+            (SalesCrMemoHeader."LFS E-Way Bill Vehicle Reason" <> xSalesCrMemoHeader."LFS E-Way Bill Vehicle Reason") or
+            (SalesCrMemoHeader."LFS E-Way Bill Remarks" <> xSalesCrMemoHeader."LFS E-Way Bill Remarks") or
+            (SalesCrMemoHeader."LFS E-Way Bill Cancel Reason" <> xSalesCrMemoHeader."LFS E-Way Bill Cancel Reason") or
+            (SalesCrMemoHeader."LFS E-Way Bill Cancel Remark" <> xSalesCrMemoHeader."LFS E-Way Bill Cancel Remark");
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales Credit Memo Hdr. - Edit", OnBeforeSalesCrMemoHeaderModify, '', false, false)]
+    local procedure "Sales Credit Memo Hdr. - Edit_OnBeforeSalesCrMemoHeaderModify"(var SalesCrMemoHeader: Record "Sales Cr.Memo Header"; FromSalesCrMemoHeader: Record "Sales Cr.Memo Header")
+    begin
+        SalesCrMemoHeader.Validate("Vehicle No.", FromSalesCrMemoHeader."Vehicle No.");
+        SalesCrMemoHeader.Validate("Vehicle Type", FromSalesCrMemoHeader."Vehicle Type");
+        SalesCrMemoHeader.Validate("LFS Mode of Transport", FromSalesCrMemoHeader."LFS Mode of Transport");
+        SalesCrMemoHeader.Validate("LFS E-Way Bill Vehicle Reason", FromSalesCrMemoHeader."LFS E-Way Bill Vehicle Reason");
+        SalesCrMemoHeader.Validate("LFS E-Way Bill Remarks", FromSalesCrMemoHeader."LFS E-Way Bill Remarks");
+        SalesCrMemoHeader.Validate("LFS E-Way Bill Cancel Reason", FromSalesCrMemoHeader."LFS E-Way Bill Cancel Reason");
+        SalesCrMemoHeader.Validate("LFS E-Way Bill Cancel Remark", FromSalesCrMemoHeader."LFS E-Way Bill Cancel Remark");
+        SalesCrMemoHeader.Modify();
+    end;
+
 }

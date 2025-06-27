@@ -6,7 +6,7 @@ using Microsoft.Foundation.Shipping;
 using Microsoft.Sales.History;
 codeunit 73100 "E-Way Bill Generation"
 {
-    Permissions = tabledata "Sales Invoice Header" = RM, tabledata "Transfer Shipment Header" = RM;
+    Permissions = tabledata "Sales Invoice Header" = RM, tabledata "Transfer Shipment Header" = RM, tabledata "Sales Cr.Memo Header" = RM;
 
     var
         GlbTextVars, GlbTextVarAuth : Text;
@@ -71,6 +71,7 @@ codeunit 73100 "E-Way Bill Generation"
         GSTRegNos: Record "GST Registration Nos.";
         PostedSalesInvoice: Record "Sales Invoice Header";
         PostedTransferShipment: Record "Transfer Shipment Header";
+        PostedSalesCreditMemo: Record "Sales Cr.Memo Header";
         Remarks: Text;
         Status: Text;
 #pragma warning disable AA0470
@@ -169,6 +170,27 @@ codeunit 73100 "E-Way Bill Generation"
                                                 PostedSalesInvoice."LFS E-Way Bill Message".CreateOutStream(OutStream);
                                                 OutStream.WriteText(StrSubstNo(ReturnMsg, Remarks, Status));
                                                 PostedSalesInvoice.Modify();
+                                            end;
+
+                                            //Update Posted Sales Credit Memo
+                                            PostedSalesCreditMemo.Reset();
+                                            PostedSalesCreditMemo.SetRange("No.", DocumentNo);
+                                            if PostedSalesCreditMemo.FindFirst() then begin
+                                                if JSONObject.Get('EwbNo', valueJSONToken) then
+                                                    PostedSalesCreditMemo."E-Way Bill No." := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedSalesCreditMemo."E-Way Bill No."));
+
+                                                if JSONObject.Get('EwbDt', valueJSONToken) then
+                                                    PostedSalesCreditMemo."LFS E-Way Bill Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+
+                                                if JSONObject.Get('EwbValidTill', valueJSONToken) then begin
+                                                    JsonValue := valueJSONToken.AsValue();
+                                                    if not JSONValue.IsNull() then
+                                                        PostedSalesCreditMemo."LFS E-Way Bill Valid Upto Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+                                                end;
+
+                                                PostedSalesCreditMemo."LFS E-Way Bill Message".CreateOutStream(OutStream);
+                                                OutStream.WriteText(StrSubstNo(ReturnMsg, Remarks, Status));
+                                                PostedSalesCreditMemo.Modify();
                                             end;
 
                                             // Update Posted Transfer Shipment
@@ -276,6 +298,66 @@ codeunit 73100 "E-Way Bill Generation"
             GlbTextVars += '}';
             Message(GlbTextVars);
             GenerateEWAYBILL(GlbTextVars, PostedSalesInvoice."Location GST Reg. No.", PostedSalesInvoice."No.");
+        end;
+    end;
+
+    procedure GenerateSalesCreditMemoDetails(CreditNo: Code[20])
+    var
+        PostedSalesCreditMemo: Record "Sales Cr.Memo Header";
+        ShippingAgent: Record "Shipping Agent";
+    begin
+        PostedSalesCreditMemo.Reset();
+        PostedSalesCreditMemo.SetRange("No.", CreditNo);
+        if PostedSalesCreditMemo.FindFirst() then begin
+            GlbTextVars := '';
+            GlbTextVars += '{';
+            WriteToGlbTextVar('ACTION', 'EWAYBILL', 0, TRUE);
+            WriteToGlbTextVar('Irn', PostedSalesCreditMemo."IRN Hash", 0, TRUE);
+            WriteToGlbTextVar('Distance', '0', 0, TRUE);
+            if PostedSalesCreditMemo."Vehicle No." <> '' then
+                if PostedSalesCreditMemo."LFS Mode of Transport" <> PostedSalesCreditMemo."LFS Mode of Transport"::"0" then
+                    case PostedSalesCreditMemo."LFS Mode of Transport" of
+                        PostedSalesCreditMemo."LFS Mode of Transport"::"1":
+                            WriteToGlbTextVar('TransMode', '1', 0, TRUE);
+                        PostedSalesCreditMemo."LFS Mode of Transport"::"2":
+                            WriteToGlbTextVar('TransMode', '2', 0, TRUE);
+                        PostedSalesCreditMemo."LFS Mode of Transport"::"3":
+                            WriteToGlbTextVar('TransMode', '3', 0, TRUE);
+                        PostedSalesCreditMemo."LFS Mode of Transport"::"4":
+                            WriteToGlbTextVar('TransMode', '4', 0, TRUE);
+                    end
+                else
+                    WriteToGlbTextVar('TransMode', 'null', 1, TRUE)
+            else
+                WriteToGlbTextVar('TransMode', 'null', 1, TRUE);
+
+            ShippingAgent.Reset();
+            ShippingAgent.SetRange(Code, PostedSalesCreditMemo."Shipping Agent Code");
+            if ShippingAgent.FindFirst() then begin
+                WriteToGlbTextVar('TransId', ShippingAgent."GST Registration No.", 0, TRUE);
+                WriteToGlbTextVar('TransName', DELCHR(ShippingAgent.Name, '=', '"^([^\"])*$"'), 0, TRUE);
+            end;
+            // WriteToGlbTextVar('TransDocDt', Format(PostedSalesInvoice."Document Date", 0, '<Day,2>/<Month,2>/<Year4>'), 0, TRUE);
+            // WriteToGlbTextVar('TransDocNo', PostedSalesInvoice."No.", 0, TRUE);
+            WriteToGlbTextVar('TransDocDt', 'null', 1, TRUE);
+            WriteToGlbTextVar('TransDocNo', 'null', 1, TRUE);
+            if PostedSalesCreditMemo."Vehicle No." <> '' then
+                WriteToGlbTextVar('VehNo', PostedSalesCreditMemo."Vehicle No.", 0, TRUE)
+            else
+                WriteToGlbTextVar('VehNo', 'null', 1, TRUE);
+            if PostedSalesCreditMemo."Vehicle Type" <> PostedSalesCreditMemo."Vehicle Type"::" " then begin
+                if PostedSalesCreditMemo."Vehicle Type" = PostedSalesCreditMemo."Vehicle Type"::ODC then
+                    WriteToGlbTextVar('VehType', 'O', 0, TRUE)
+                else
+                    if PostedSalesCreditMemo."Vehicle Type" = PostedSalesCreditMemo."Vehicle Type"::Regular then
+                        WriteToGlbTextVar('VehType', 'R', 0, TRUE);
+            end else
+                WriteToGlbTextVar('VehType', 'null', 1, TRUE);
+            WriteToGlbTextVar('ExpShipDtls', 'null', 1, TRUE);
+            WriteToGlbTextVar('DispDtls', 'null', 1, false);
+            GlbTextVars += '}';
+            Message(GlbTextVars);
+            GenerateEWAYBILL(GlbTextVars, PostedSalesCreditMemo."Location GST Reg. No.", PostedSalesCreditMemo."No.");
         end;
     end;
 

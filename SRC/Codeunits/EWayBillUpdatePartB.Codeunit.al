@@ -208,6 +208,71 @@ codeunit 73101 "LFS E-Way Bill Update Part-B"
         end;
     end;
 
+    procedure GenerateSalesCreditMemoDetails(CreditNo: Code[20])
+    var
+        PostedSalesCreditMemo: Record "Sales Cr.Memo Header";
+        Location: Record Location;
+        State: Record State;
+    begin
+        PostedSalesCreditMemo.Reset();
+        PostedSalesCreditMemo.SetRange("No.", CreditNo);
+        if PostedSalesCreditMemo.FindFirst() then begin
+            GlbTextVars := '';
+            GlbTextVars += '{';
+            WriteToGlbTextVar('action', 'UPDATEPARTB', 0, TRUE);
+            GlbTextVars += '"data" : [';
+            GlbTextVars += '{';
+            WriteToGlbTextVar('Generator_Gstin', PostedSalesCreditMemo."Location GST Reg. No.", 0, TRUE);
+            WriteToGlbTextVar('EwbNo', PostedSalesCreditMemo."E-Way Bill No.", 0, TRUE);
+            if PostedSalesCreditMemo."LFS Mode of Transport" <> PostedSalesCreditMemo."LFS Mode of Transport"::"0" then
+                case PostedSalesCreditMemo."LFS Mode of Transport" of
+                    PostedSalesCreditMemo."LFS Mode of Transport"::"1":
+                        WriteToGlbTextVar('TransportMode', 'Road', 0, TRUE);
+                    PostedSalesCreditMemo."LFS Mode of Transport"::"2":
+                        WriteToGlbTextVar('TransportMode', 'Rail', 0, TRUE);
+                    PostedSalesCreditMemo."LFS Mode of Transport"::"3":
+                        WriteToGlbTextVar('TransportMode', 'Air', 0, TRUE);
+                    PostedSalesCreditMemo."LFS Mode of Transport"::"4":
+                        WriteToGlbTextVar('TransportMode', 'Ship', 0, true);
+                end
+            else
+                WriteToGlbTextVar('TransportMode', 'null', 1, TRUE);
+            if PostedSalesCreditMemo."Vehicle Type" <> PostedSalesCreditMemo."Vehicle Type"::" " then begin
+                if PostedSalesCreditMemo."Vehicle Type" = PostedSalesCreditMemo."Vehicle Type"::ODC
+                    then
+                    WriteToGlbTextVar('VehicleType', 'O', 0, TRUE)
+                else
+                    if PostedSalesCreditMemo."Vehicle Type" = PostedSalesCreditMemo."Vehicle Type"::Regular
+                        then
+                        WriteToGlbTextVar('VehicleType', 'R', 0, TRUE);
+            end
+            else
+                WriteToGlbTextVar('VehicleType', '', 1, TRUE);
+            if PostedSalesCreditMemo."Vehicle No." <> '' then
+                WriteToGlbTextVar('VehicleNo', PostedSalesCreditMemo."Vehicle No.", 0, TRUE)
+            else
+                WriteToGlbTextVar('VehicleNo', '', 0, TRUE);
+            WriteToGlbTextVar('TransDocNumber', '', 0, TRUE);
+            WriteToGlbTextVar('TransDocDate', '', 0, TRUE);
+
+            Location.Reset();
+            Location.SetRange(Code, PostedSalesCreditMemo."Location Code");
+            if Location.FindFirst() then begin
+                State.Reset();
+                State.SetRange(Code, Location."State Code");
+                if State.FindFirst() then
+                    WriteToGlbTextVar('StateName', State.Description, 0, TRUE);
+                WriteToGlbTextVar('FromCityPlace', Location.City, 0, TRUE);
+            end;
+            WriteToGlbTextVar('VehicleReason', Format(PostedSalesCreditMemo."LFS E-Way Bill Vehicle Reason"), 0, TRUE);
+            WriteToGlbTextVar('Remarks', PostedSalesCreditMemo."LFS E-Way Bill Remarks", 0, false);
+            GlbTextVars += '}]}';
+
+            Message(GlbTextVars);
+            UpdatePartBEWAYBILL(GlbTextVars, PostedSalesCreditMemo."Location GST Reg. No.", PostedSalesCreditMemo."No.");
+        end;
+    end;
+
     procedure GenerateTransferShipmentDetails(TransferNo: Code[20])
     var
         PostedTransferShipment: Record "Transfer Shipment Header";

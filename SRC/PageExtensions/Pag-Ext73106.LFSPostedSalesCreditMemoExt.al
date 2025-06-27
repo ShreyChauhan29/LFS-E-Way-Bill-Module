@@ -7,52 +7,73 @@ pageextension 73106 "LFSPosted Sales Credit MemoExt" extends "Posted Sales Credi
     PromotedActionCategories = 'New, Process, Report, Category4, Category5, Category6, Category7, Category8, Category9, E-Way Bill';
     layout
     {
-        // addafter()
-        // {
-        //     field("LFS Mode of Transport"; Rec."LFS Mode of Transport")
-        //     {
-        //         ApplicationArea = All;
-        //         ToolTip = 'Specifies the value of the LFS Mode of Transport field.', Comment = '%';
-        //     }
-        // }
-        // addafter("E-Way Bill No.")
-        // {
-        //     field("LFS E-Way Bill Date"; Rec."LFS E-Way Bill Date")
-        //     {
-        //         ApplicationArea = All;
-        //         ToolTip = 'Specifies the value of the LFS E-Way Bill Date field.', Comment = '%';
-        //     }
-        //     field("LFS E-Way Bill Valid Upto Date"; Rec."LFS E-Way Bill Valid Upto Date")
-        //     {
-        //         ApplicationArea = All;
-        //         ToolTip = 'Specifies the value of the LFS E-Way Bill Valid Upto Date field.', Comment = '%';
-        //     }
-        //     field("LFS E-Way Bill VehicleUpdtDate"; Rec."LFS E-Way Bill VehicleUpdtDate")
-        //     {
-        //         ApplicationArea = All;
-        //         ToolTip = 'Specifies the value of the E-Way Bill Vehicle Updated Date field.', Comment = '%';
-        //     }
-        //     field("LFS E-Way Bill TransporterDate"; Rec."LFS E-Way Bill TransporterDate")
-        //     {
-        //         ApplicationArea = All;
-        //         ToolTip = 'Specifies the value of the E-Way Bill Transporter Updated Date field.', Comment = '%';
-        //     }
-        //     field("LFS E-Way Bill Vehicle Reason"; Rec."LFS E-Way Bill Vehicle Reason")
-        //     {
-        //         ApplicationArea = All;
-        //         ToolTip = 'Specifies the value of the E-Way Bill Vehicle Reason field.', Comment = '%';
-        //     }
-        //     field("LFS E-Way Bill Remarks"; Rec."LFS E-Way Bill Remarks")
-        //     {
-        //         ApplicationArea = All;
-        //         ToolTip = 'Specifies the value of the E-Way Bill Remarks field.', Comment = '%';
-        //     }
-        //     field("LFS E-Way Bill Message"; Rec."LFS E-Way Bill Message")
-        //     {
-        //         ApplicationArea = All;
-        //         ToolTip = 'Specifies the value of the LFS E-Way Bill Message field.', Comment = '%';
-        //     }
-        // }
+        addafter("Distance (Km)")
+        {
+            field("LFS Mode of Transport"; Rec."LFS Mode of Transport")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the LFS Mode of Transport field.', Comment = '%';
+            }
+        }
+        addafter("Tax Info")
+        {
+            group("E-Way Bill Details")
+            {
+                Caption = 'E-Way Bill Details';
+
+                field("LFS E-Way Bill Date"; Rec."LFS E-Way Bill Date")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the LFS E-Way Bill Date field.', Comment = '%';
+                }
+                field("LFS E-Way Bill Valid Upto Date"; Rec."LFS E-Way Bill Valid Upto Date")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the LFS E-Way Bill Valid Upto Date field.', Comment = '%';
+                }
+                field("LFS E-Way Bill VehicleUpdtDate"; Rec."LFS E-Way Bill VehicleUpdtDate")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the E-Way Bill Vehicle Updated Date field.', Comment = '%';
+                }
+                field("LFS E-Way Bill TransporterDate"; Rec."LFS E-Way Bill TransporterDate")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the E-Way Bill Transporter Updated Date field.', Comment = '%';
+                }
+                field("LFS E-Way Bill Vehicle Reason"; Rec."LFS E-Way Bill Vehicle Reason")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the E-Way Bill Vehicle Reason field.', Comment = '%';
+                }
+                field("LFS E-Way Bill Remarks"; Rec."LFS E-Way Bill Remarks")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the E-Way Bill Remarks field.', Comment = '%';
+                }
+                field("LFS E-Way Bill Message"; Rec."LFS E-Way Bill Message")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the LFS E-Way Bill Message field.', Comment = '%';
+                    Visible = false;
+                }
+                field("LFS E-Way Bill Cancel Date"; Rec."LFS E-Way Bill Cancel Date")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the E-Way Bill Cancel Date field.', Comment = '%';
+                }
+                field("LFS E-Way Bill Cancel Reason"; Rec."LFS E-Way Bill Cancel Reason")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the E-Way Bill Cancel Reason field.', Comment = '%';
+                }
+                field("LFS E-Way Bill Cancel Remark"; Rec."LFS E-Way Bill Cancel Remark")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the E-Way Bill Cancel Remark field.', Comment = '%';
+                }
+            }
+        }
     }
     actions
     {
@@ -77,7 +98,7 @@ pageextension 73106 "LFSPosted Sales Credit MemoExt" extends "Posted Sales Credi
                     begin
                         if Rec."IRN Hash" <> '' then begin
                             Clear(EInvoiceAPI);
-                            EInvoiceAPI.GenerateSalesInvoiceDetails(Rec."No.");
+                            EInvoiceAPI.GenerateSalesCreditMemoDetails(Rec."No.");
                         end;
                     end;
                 }
@@ -119,23 +140,6 @@ pageextension 73106 "LFSPosted Sales Credit MemoExt" extends "Posted Sales Credi
                         end;
                     end;
                 }
-                action("LFS Cancel E-Way Bill No.")
-                {
-                    ApplicationArea = All;
-                    Caption = 'Cancel E-Way Bill No.';
-                    ToolTip = 'Specifies the Cancel E-Way Bill No.';
-                    Promoted = true;
-                    PromotedCategory = Category10;
-                    PromotedIsBig = true;
-                    Image = Cancel;
-                    trigger OnAction()
-                    var
-                        EInvoiceAPI: Codeunit "E-Way Bill Generation";
-                    begin
-                        Clear(EInvoiceAPI);
-                        // EInvoiceAPI.CancelIRN(Rec."No.",1,Rec."Location GST Reg. No.",Rec."Cancel Reason");
-                    end;
-                }
                 action("LFS Get E-Way Bill By Invoice No.")
                 {
                     ApplicationArea = All;
@@ -145,6 +149,7 @@ pageextension 73106 "LFSPosted Sales Credit MemoExt" extends "Posted Sales Credi
                     Promoted = true;
                     PromotedCategory = Category10;
                     PromotedIsBig = true;
+                    Visible = false;
 
                     trigger OnAction()
                     var
@@ -152,6 +157,78 @@ pageextension 73106 "LFSPosted Sales Credit MemoExt" extends "Posted Sales Credi
                     begin
                         Clear(EInvoiceAPI);
                         // EInvoiceAPI.FetchIRN(Rec."No.", 1, Rec."Posting Date", Rec."Location GST Reg. No.");
+                    end;
+                }
+                action("LFS Cancel Eway Bill")
+                {
+                    ApplicationArea = All;
+                    Image = CancelAllLines;
+                    Promoted = true;
+                    PromotedCategory = Category10;
+                    PromotedIsBig = true;
+                    ToolTip = 'Specifies the Cancel Eway Bill';
+                    Caption = 'Cancel E-Way Bill No.';
+                    trigger OnAction()
+                    var
+                        EWayBillAPI: Codeunit "LFS E-Way Bill Cancellation";
+                    begin
+                        CLEAR(EwayBillAPI);
+                        EwayBillAPI.GenerateCancelEwayBillSalesInvoice(Rec."No.");
+                    end;
+                }
+                action("LFS Download Eway Bill PDF")
+                {
+                    ApplicationArea = All;
+                    Image = Download;
+                    ToolTip = 'Specifies the Download Eway Bill PDF';
+                    Caption = 'Download E-Way Bill PDF';
+                    Promoted = true;
+                    PromotedCategory = Category10;
+                    PromotedIsBig = true;
+                    trigger OnAction()
+                    var
+                        EWayBillAPI: Codeunit "E-Way Bill Generation";
+                    begin
+                        CLEAR(EwayBillAPI);
+                        EwayBillAPI.DownloadEwayBillPDFSalesInvocies(Rec."No.");
+                    end;
+                }
+                action("Generate Multiple E-Way Bill")
+                {
+                    ApplicationArea = All;
+                    Image = RegisteredDocs;
+                    Caption = 'Generate Multiple Vehicle E-Way Bill';
+                    ToolTip = 'Specifies the Generate Multiple Vehicle E-Way Bill';
+                    Promoted = true;
+                    PromotedCategory = Category10;
+                    PromotedIsBig = true;
+                    trigger OnAction()
+                    var
+                        EWayBillAPI: Codeunit "LFS Multiple Vehicle E-WayBill";
+                    begin
+                        if (Rec."IRN Hash" <> '') and (Rec."E-Way Bill No." <> '') then begin
+                            Clear(EWayBillAPI);
+                            EWayBillAPI.GenerateSalesInvoiceDetails(Rec."No.");
+                        end;
+                    end;
+                }
+                action("Update Multiple Vehicle E-Way Bill")
+                {
+                    ApplicationArea = All;
+                    Image = UpdateDescription;
+                    Caption = 'Update Multiple Vehicle E-Way Bill';
+                    ToolTip = 'Specifies the Update Multiple Vehicle E-Way Bill';
+                    Promoted = true;
+                    PromotedCategory = Category10;
+                    PromotedIsBig = true;
+                    trigger OnAction()
+                    var
+                        EWayBillAPI: Codeunit "LFS Multi Vehicle UpdatePart-B";
+                    begin
+                        if (Rec."IRN Hash" <> '') and (Rec."E-Way Bill No." <> '') then begin
+                            Clear(EWayBillAPI);
+                            EWayBillAPI.GenerateSalesInvoiceDetails(Rec."No.");
+                        end;
                     end;
                 }
             }

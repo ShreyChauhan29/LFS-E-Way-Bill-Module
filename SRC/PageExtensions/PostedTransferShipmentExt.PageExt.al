@@ -50,7 +50,23 @@ pageextension 73108 "LFSPosted Transfer ShipmentExt" extends "Posted Transfer Sh
             field("LFS E-Way Bill Message"; Rec."LFS E-Way Bill Message")
             {
                 ApplicationArea = All;
+                Visible = false;
                 ToolTip = 'Specifies the value of the LFS E-Way Bill Message field.', Comment = '%';
+            }
+            field("LFS E-Way Bill Cancel Date"; Rec."LFS E-Way Bill Cancel Date")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the E-Way Bill Cancel Date field.', Comment = '%';
+            }
+            field("LFS E-Way Bill Cancel Reason"; Rec."LFS E-Way Bill Cancel Reason")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the E-Way Bill Cancel Reason field.', Comment = '%';
+            }
+            field("LFS E-Way Bill Cancel Remark"; Rec."LFS E-Way Bill Cancel Remark")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the E-Way Bill Cancel Remark field.', Comment = '%';
             }
         }
         modify("Mode of Transport")
@@ -123,23 +139,6 @@ pageextension 73108 "LFSPosted Transfer ShipmentExt" extends "Posted Transfer Sh
                         end;
                     end;
                 }
-                action("LFS Cancel E-Way Bill No.")
-                {
-                    ApplicationArea = All;
-                    Caption = 'Cancel E-Way Bill No.';
-                    ToolTip = 'Specifies the Cancel E-Way Bill No.';
-                    Promoted = true;
-                    PromotedCategory = Category10;
-                    PromotedIsBig = true;
-                    Image = Cancel;
-                    trigger OnAction()
-                    var
-                        EInvoiceAPI: Codeunit "E-Way Bill Generation";
-                    begin
-                        Clear(EInvoiceAPI);
-                        // EInvoiceAPI.CancelIRN(Rec."No.",1,Rec."Location GST Reg. No.",Rec."Cancel Reason");
-                    end;
-                }
                 action("LFS Get E-Way Bill By Invoice No.")
                 {
                     ApplicationArea = All;
@@ -149,6 +148,7 @@ pageextension 73108 "LFSPosted Transfer ShipmentExt" extends "Posted Transfer Sh
                     Promoted = true;
                     PromotedCategory = Category10;
                     PromotedIsBig = true;
+                    Visible = false;
 
                     trigger OnAction()
                     var
@@ -160,6 +160,7 @@ pageextension 73108 "LFSPosted Transfer ShipmentExt" extends "Posted Transfer Sh
                 }
                 action("LFS Cancel Eway Bill")
                 {
+                    ApplicationArea = All;
                     Image = CancelAllLines;
                     Promoted = true;
                     PromotedCategory = Category10;
@@ -176,6 +177,7 @@ pageextension 73108 "LFSPosted Transfer ShipmentExt" extends "Posted Transfer Sh
                 }
                 action("LFS Download Eway Bill PDF")
                 {
+                    ApplicationArea = All;
                     Image = Download;
                     ToolTip = 'Specifies the Download Eway Bill PDF';
                     Caption = 'Download E-Way Bill PDF';
@@ -188,6 +190,44 @@ pageextension 73108 "LFSPosted Transfer ShipmentExt" extends "Posted Transfer Sh
                     begin
                         CLEAR(EwayBillAPI);
                         EwayBillAPI.DownloadEwayBillPDFTransferShipments(Rec."No.");
+                    end;
+                }
+                action("Generate Multiple E-Way Bill")
+                {
+                    ApplicationArea = All;
+                    Image = RegisteredDocs;
+                    Caption = 'Generate Multiple Vehicle E-Way Bill';
+                    ToolTip = 'Specifies the Generate Multiple Vehicle E-Way Bill';
+                    Promoted = true;
+                    PromotedCategory = Category10;
+                    PromotedIsBig = true;
+                    trigger OnAction()
+                    var
+                        EWayBillAPI: Codeunit "LFS Multiple Vehicle E-WayBill";
+                    begin
+                        if (Rec."IRN Hash" <> '') and (Rec."E-Way Bill No." <> '') then begin
+                            Clear(EWayBillAPI);
+                            EWayBillAPI.GenerateTransferShipmentDetails(Rec."No.");
+                        end;
+                    end;
+                }
+                action("Update Multiple Vehicle E-Way Bill")
+                {
+                    ApplicationArea = All;
+                    Image = UpdateDescription;
+                    Caption = 'Update Multiple Vehicle E-Way Bill';
+                    ToolTip = 'Specifies the Update Multiple Vehicle E-Way Bill';
+                    Promoted = true;
+                    PromotedCategory = Category10;
+                    PromotedIsBig = true;
+                    trigger OnAction()
+                    var
+                        EWayBillAPI: Codeunit "LFS Multi Vehicle UpdatePart-B";
+                    begin
+                        if (Rec."IRN Hash" <> '') and (Rec."E-Way Bill No." <> '') then begin
+                            Clear(EWayBillAPI);
+                            EWayBillAPI.GenerateTransferShipmentDetails(Rec."No.");
+                        end;
                     end;
                 }
             }
