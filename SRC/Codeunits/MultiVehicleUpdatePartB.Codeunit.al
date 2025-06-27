@@ -129,7 +129,20 @@ codeunit 73106 "LFS Multi Vehicle UpdatePart-B"
                     WriteToGlbTextVar('OldvehicleNo', MultipleVehicleEWayBill."LFS Old Vehicle No.", 0, true);
                     WriteToGlbTextVar('OldTranNo', '', 0, true);
                     WriteToGlbTextVar('NewTranNo', '', 0, true);
-                    WriteToGlbTextVar('TransportMode', Format(PostedSalesInvoice."LFS Mode of Transport"), 0, true);
+                    if PostedSalesInvoice."LFS Mode of Transport" <> PostedSalesInvoice."LFS Mode of Transport"::"0" then
+                        case PostedSalesInvoice."LFS Mode of Transport" of
+                            PostedSalesInvoice."LFS Mode of Transport"::"1":
+                                WriteToGlbTextVar('TransMode', '1', 0, TRUE);
+                            PostedSalesInvoice."LFS Mode of Transport"::"2":
+                                WriteToGlbTextVar('TransMode', '2', 0, TRUE);
+                            PostedSalesInvoice."LFS Mode of Transport"::"3":
+                                WriteToGlbTextVar('TransMode', '3', 0, TRUE);
+                            PostedSalesInvoice."LFS Mode of Transport"::"4":
+                                WriteToGlbTextVar('TransMode', '4', 0, TRUE);
+                        end
+                    else
+                        WriteToGlbTextVar('TransMode', 'null', 1, TRUE);
+                    // WriteToGlbTextVar('TransMode', Format(PostedSalesInvoice."LFS Mode of Transport"), 0, true);
                     Location.Reset();
                     Location.SetRange(Code, PostedSalesInvoice."Location Code");
                     if Location.FindFirst() then begin

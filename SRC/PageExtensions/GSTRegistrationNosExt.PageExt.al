@@ -33,6 +33,11 @@ pageextension 73100 "LFS GST Registration Nos. Ext." extends "GST Registration N
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the E-Way Bill API IP Address field.', Comment = '%';
             }
+            field("LFS E-Way Bill AuthenticateURL"; Rec."LFS E-Way Bill AuthenticateURL")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies the value of the E-Way Bill Authenticate URL field.', Comment = '%';
+            }
             field("LFS E-Way Bill/Invoice API URL"; Rec."LFS E-Way Bill/Invoice API URL")
             {
                 ApplicationArea = All;

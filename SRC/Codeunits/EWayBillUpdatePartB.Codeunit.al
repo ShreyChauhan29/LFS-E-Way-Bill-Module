@@ -138,14 +138,16 @@ codeunit 73101 "LFS E-Way Bill Update Part-B"
             if PostedSalesInvoice."LFS Mode of Transport" <> PostedSalesInvoice."LFS Mode of Transport"::"0" then
                 case PostedSalesInvoice."LFS Mode of Transport" of
                     PostedSalesInvoice."LFS Mode of Transport"::"1":
-                        WriteToGlbTextVar('TransportMode', 'Road', 0, TRUE);
+                        WriteToGlbTextVar('TransMode', '1', 0, TRUE);
                     PostedSalesInvoice."LFS Mode of Transport"::"2":
-                        WriteToGlbTextVar('TransportMode', 'Rail', 0, TRUE);
+                        WriteToGlbTextVar('TransMode', '2', 0, TRUE);
                     PostedSalesInvoice."LFS Mode of Transport"::"3":
-                        WriteToGlbTextVar('TransportMode', 'Air', 0, TRUE);
+                        WriteToGlbTextVar('TransMode', '3', 0, TRUE);
                     PostedSalesInvoice."LFS Mode of Transport"::"4":
-                        WriteToGlbTextVar('TransportMode', 'Ship', 0, TRUE);
-                end;
+                        WriteToGlbTextVar('TransMode', '4', 0, TRUE);
+                end
+            else
+                WriteToGlbTextVar('TransMode', 'null', 1, TRUE);
             if PostedSalesInvoice."Vehicle Type" <> PostedSalesInvoice."Vehicle Type"::" " then begin
                 if PostedSalesInvoice."Vehicle Type" = PostedSalesInvoice."Vehicle Type"::ODC then
                     WriteToGlbTextVar('VehicleType', 'O', 0, TRUE)
@@ -201,14 +203,16 @@ codeunit 73101 "LFS E-Way Bill Update Part-B"
             if PostedTransferShipment."LFS Mode of Transport" <> PostedTransferShipment."LFS Mode of Transport"::"0" then
                 case PostedTransferShipment."LFS Mode of Transport" of
                     PostedTransferShipment."LFS Mode of Transport"::"1":
-                        WriteToGlbTextVar('TransportMode', 'Road', 0, TRUE);
+                        WriteToGlbTextVar('TransMode', '1', 0, TRUE);
                     PostedTransferShipment."LFS Mode of Transport"::"2":
-                        WriteToGlbTextVar('TransportMode', 'Rail', 0, TRUE);
+                        WriteToGlbTextVar('TransMode', '2', 0, TRUE);
                     PostedTransferShipment."LFS Mode of Transport"::"3":
-                        WriteToGlbTextVar('TransportMode', 'Air', 0, TRUE);
+                        WriteToGlbTextVar('TransMode', '3', 0, TRUE);
                     PostedTransferShipment."LFS Mode of Transport"::"4":
-                        WriteToGlbTextVar('TransportMode', 'Ship', 0, TRUE);
-                end;
+                        WriteToGlbTextVar('TransMode', '4', 0, TRUE);
+                end
+            else
+                WriteToGlbTextVar('TransMode', 'null', 1, TRUE);
             if PostedTransferShipment."Vehicle Type" <> PostedTransferShipment."Vehicle Type"::" " then begin
                 if PostedTransferShipment."Vehicle Type" = PostedTransferShipment."Vehicle Type"::ODC then
                     WriteToGlbTextVar('VehicleType', 'O', 0, TRUE)

@@ -51,5 +51,10 @@ tableextension 73100 "LFS GST Registration Nos. Ext." extends "GST Registration 
             Caption = 'E-Way Bill API URL';
             DataClassification = CustomerContent;
         }
+        field(73109; "LFS E-Way Bill AuthenticateURL"; Text[100])
+        {
+            Caption = 'E-Way Bill Authenticate URL';
+            DataClassification = CustomerContent;
+        }
     }
 }

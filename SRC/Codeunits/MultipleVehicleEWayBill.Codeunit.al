@@ -233,7 +233,21 @@ codeunit 73105 "LFS Multiple Vehicle E-WayBill"
                             end;
                         end;
                     end;
-                    WriteToGlbTextVar('TransportMode', Format(PostedSalesInvoice."LFS Mode of Transport"), 0, true);
+
+                    if PostedSalesInvoice."LFS Mode of Transport" <> PostedSalesInvoice."LFS Mode of Transport"::"0" then
+                        case PostedSalesInvoice."LFS Mode of Transport" of
+                            PostedSalesInvoice."LFS Mode of Transport"::"1":
+                                WriteToGlbTextVar('TransMode', '1', 0, TRUE);
+                            PostedSalesInvoice."LFS Mode of Transport"::"2":
+                                WriteToGlbTextVar('TransMode', '2', 0, TRUE);
+                            PostedSalesInvoice."LFS Mode of Transport"::"3":
+                                WriteToGlbTextVar('TransMode', '3', 0, TRUE);
+                            PostedSalesInvoice."LFS Mode of Transport"::"4":
+                                WriteToGlbTextVar('TransMode', '4', 0, TRUE);
+                        end
+                    else
+                        WriteToGlbTextVar('TransMode', 'null', 1, TRUE);
+                    // WriteToGlbTextVar('TransMode', Format(PostedSalesInvoice."LFS Mode of Transport"), 0, true);
 
                     WriteToGlbTextVar('TotalQuantity', Format(MultipleVehicleEWayBill."LFS Total Quantity"), 0, true);
                     WriteToGlbTextVar('UOM', MultipleVehicleEWayBill."LFS Unit of Measure", 0, false);
@@ -276,7 +290,20 @@ codeunit 73105 "LFS Multiple Vehicle E-WayBill"
                     WriteToGlbTextVar('VehicleNo', MultipleVehicleEWayBill."LFS New Vehicle No.", 0, true);
                     WriteToGlbTextVar('TransDocDate', '', 0, true);
                     WriteToGlbTextVar('TransDocNumber', '', 0, true);
-                    WriteToGlbTextVar('TransportMode', Format(PostedSalesInvoice."LFS Mode of Transport"), 0, true);
+                    if PostedSalesInvoice."LFS Mode of Transport" <> PostedSalesInvoice."LFS Mode of Transport"::"0" then
+                        case PostedSalesInvoice."LFS Mode of Transport" of
+                            PostedSalesInvoice."LFS Mode of Transport"::"1":
+                                WriteToGlbTextVar('TransMode', '1', 0, TRUE);
+                            PostedSalesInvoice."LFS Mode of Transport"::"2":
+                                WriteToGlbTextVar('TransMode', '2', 0, TRUE);
+                            PostedSalesInvoice."LFS Mode of Transport"::"3":
+                                WriteToGlbTextVar('TransMode', '3', 0, TRUE);
+                            PostedSalesInvoice."LFS Mode of Transport"::"4":
+                                WriteToGlbTextVar('TransMode', '4', 0, TRUE);
+                        end
+                    else
+                        WriteToGlbTextVar('TransMode', 'null', 1, TRUE);
+                    // WriteToGlbTextVar('TransMode', Format(PostedSalesInvoice."LFS Mode of Transport"), 0, true);
                     WriteToGlbTextVar('Quantity', Format(MultipleVehicleEWayBill."LFS Total Quantity"), 0, false);
 
                     Increment += 1;
