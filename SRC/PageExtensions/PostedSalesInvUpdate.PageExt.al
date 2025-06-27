@@ -54,7 +54,7 @@ pageextension 73105 "LFS Posted Sales Inv. - Update" extends "Posted Sales Inv. 
                 Caption = 'Multiple Vehicle E-Way Bill';
             }
         }
-        moveafter("LFS E-Way Bill Remarks"; "Shipping Agent Code")
+        movebefore("Vehicle No."; "Shipping Agent Code")
         modify("Shipping Agent Code")
         {
             Caption = 'Shipping Agent';

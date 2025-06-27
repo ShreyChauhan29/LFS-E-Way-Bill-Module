@@ -15,48 +15,70 @@ pageextension 73104 "LFS Posted Sales Invoice Ext." extends "Posted Sales Invoic
                 ToolTip = 'Specifies the value of the LFS Mode of Transport field.', Comment = '%';
             }
         }
-        addafter("E-Way Bill No.")
+        addafter("Tax Info")
         {
-            field("LFS E-Way Bill Date"; Rec."LFS E-Way Bill Date")
+            group("E-Way Bill Details")
             {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the LFS E-Way Bill Date field.', Comment = '%';
-            }
-            field("LFS E-Way Bill Valid Upto Date"; Rec."LFS E-Way Bill Valid Upto Date")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the LFS E-Way Bill Valid Upto Date field.', Comment = '%';
-            }
-            field("LFS E-Way Bill VehicleUpdtDate"; Rec."LFS E-Way Bill VehicleUpdtDate")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the E-Way Bill Vehicle Updated Date field.', Comment = '%';
-            }
-            field("LFS E-Way Bill TransporterDate"; Rec."LFS E-Way Bill TransporterDate")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the E-Way Bill Transporter Updated Date field.', Comment = '%';
-            }
-            field("LFS E-Way Bill Vehicle Reason"; Rec."LFS E-Way Bill Vehicle Reason")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the E-Way Bill Vehicle Reason field.', Comment = '%';
-            }
-            field("LFS E-Way Bill Remarks"; Rec."LFS E-Way Bill Remarks")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the E-Way Bill Remarks field.', Comment = '%';
-            }
-            field("LFS E-Way Bill Message"; Rec."LFS E-Way Bill Message")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the LFS E-Way Bill Message field.', Comment = '%';
+                Caption = 'E-Way Bill Details';
+
+                field("LFS E-Way Bill Date"; Rec."LFS E-Way Bill Date")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the LFS E-Way Bill Date field.', Comment = '%';
+                }
+                field("LFS E-Way Bill Valid Upto Date"; Rec."LFS E-Way Bill Valid Upto Date")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the LFS E-Way Bill Valid Upto Date field.', Comment = '%';
+                }
+                field("LFS E-Way Bill VehicleUpdtDate"; Rec."LFS E-Way Bill VehicleUpdtDate")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the E-Way Bill Vehicle Updated Date field.', Comment = '%';
+                }
+                field("LFS E-Way Bill TransporterDate"; Rec."LFS E-Way Bill TransporterDate")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the E-Way Bill Transporter Updated Date field.', Comment = '%';
+                }
+                field("LFS E-Way Bill Vehicle Reason"; Rec."LFS E-Way Bill Vehicle Reason")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the E-Way Bill Vehicle Reason field.', Comment = '%';
+                }
+                field("LFS E-Way Bill Remarks"; Rec."LFS E-Way Bill Remarks")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the E-Way Bill Remarks field.', Comment = '%';
+                }
+                field("LFS E-Way Bill Message"; Rec."LFS E-Way Bill Message")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the LFS E-Way Bill Message field.', Comment = '%';
+                    Visible = false;
+                }
+                field("LFS E-Way Bill Cancel Date"; Rec."LFS E-Way Bill Cancel Date")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the E-Way Bill Cancel Date field.', Comment = '%';
+                }
+                field("LFS E-Way Bill Cancel Reason"; Rec."LFS E-Way Bill Cancel Reason")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the E-Way Bill Cancel Reason field.', Comment = '%';
+                }
+                field("LFS E-Way Bill Cancel Remark"; Rec."LFS E-Way Bill Cancel Remark")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the E-Way Bill Cancel Remark field.', Comment = '%';
+                }
             }
         }
         modify("Mode of Transport")
         {
             Visible = false;
         }
+        movebefore("LFS E-Way Bill Date"; "E-Way Bill No.")
     }
     actions
     {
@@ -135,6 +157,7 @@ pageextension 73104 "LFS Posted Sales Invoice Ext." extends "Posted Sales Invoic
                     Promoted = true;
                     PromotedCategory = Category10;
                     PromotedIsBig = true;
+                    Visible = false;
 
                     trigger OnAction()
                     var
