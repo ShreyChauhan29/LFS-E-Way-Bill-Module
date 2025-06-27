@@ -109,66 +109,6 @@ codeunit 73100 "E-Way Bill Generation"
             if HttpResponse.HttpStatusCode() = 200 then begin
                 HttpResponse.Content.ReadAs(Response);
                 Message(Response);
-                //         if JSONToken.ReadFrom(Response) then
-                //             if JSONToken.IsObject then begin
-                //                 JSONObject := JSONToken.AsObject();
-                //                 JSONObject.Get('MessageId', valueJSONToken);
-                //                 if valueJSONToken.AsValue().AsText() = '1' then
-                //                     if JSONObject.Get('Data', ValueJSONToken) then
-                //                         if ValueJSONToken.IsObject then begin
-                //                             JSONObject.ReadFrom(format(ValueJSONToken));
-                //                             for i := 0 to JSONArray.Count() - 1 do begin
-                //                             JSONArray.Get(i, JSONToken);
-                //                             JSONObject := ValueJSONToken.AsObject();
-                //                             JSONObject.Get('Remarks', ValueJSONToken);
-                //                             Remarks := Format(ValueJSONToken.AsValue().AsText());
-                //                             if JSONToken.IsObject then begin
-                //                                 JSONObject.ReadFrom(Format(JSONToken));
-                //                                 // Remarks := JSONToken.AsValue().AsText();
-                //                                 JSONObject.Get('Status', JSONToken);
-                //                             end;
-
-                //                             Status := JSONToken.AsValue().AsText();
-                //                             if Status = 'FAILED' then
-                //                                 Error('Status : %1\ %2', Remarks, Status);
-
-                //                             if DocumentNo <> '' then begin
-                //                                 PostedSalesInvoice.Reset();
-                //                                 PostedSalesInvoice.SetRange("No.", DocumentNo);
-                //                                 if PostedSalesInvoice.FindFirst() then begin
-                //                                     JSONObject.Get('EwbNo', valueJSONToken);
-                //                                     PostedSalesInvoice."E-Way Bill No." := Format(valueJSONToken.AsValue().AsText());
-                //                                     JSONObject.Get('EwbDt', valueJSONToken);
-                //                                     // PostedSalesInvoice."LFS E-Way Bill Date" := Format(valueJSONToken.AsValue().AsText());
-                //                                     PostedSalesInvoice."LFS E-Way Bill Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
-                //                                     JSONObject.Get('EwbValidTill', valueJSONToken);
-                //                                     // Message(Format(valueJSONToken.AsValue().AsText()));
-                //                                     PostedSalesInvoice."LFS E-Way Bill Valid Upto Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
-                //                                     PostedSalesInvoice."LFS E-Way Bill Message".CreateOutStream(OutStream);
-                //                                     OutStream.WriteText(StrSubstNo(ReturnMsg, Remarks, Status));
-                //                                     PostedSalesInvoice.Modify();
-                //                                 end;
-                //                                 PostedTransferShipment.Reset();
-                //                                 PostedTransferShipment.SetRange("No.", DocumentNo);
-                //                                 if PostedTransferShipment.FindFirst() then begin
-                //                                     JSONObject.Get('EWB_NO', valueJSONToken);
-                //                                     PostedTransferShipment."E-Way Bill No." := Format(valueJSONToken.AsValue().AsText());
-                //                                     JSONObject.Get('EWB_DATE', valueJSONToken);
-                //                                     PostedTransferShipment."LFS E-Way Bill Date" := valueJSONToken.AsValue().AsDateTime();
-                //                                     JSONObject.Get('VALID_UPTO_DATE', valueJSONToken);
-                //                                     PostedTransferShipment."LFS E-Way Bill Valid Upto Date" := valueJSONToken.AsValue().AsDateTime();
-                //                                     PostedTransferShipment."LFS E-Way Bill Message".CreateOutStream(OutStream);
-                //                                     OutStream.WriteText(StrSubstNo(ReturnMsg, Remarks, Status));
-                //                                     PostedTransferShipment.Modify();
-                //                                 end;
-                //                             end;
-                //                             end;
-                //                         end;
-                //             end;
-                //     end else
-                //         Error('Unable to connect %1', HttpResponse.HttpStatusCode());
-                // end else
-                //     Error('Cannot connect,connection error');
                 if JSONToken.ReadFrom(Response) then
                     if JSONToken.IsObject then begin
                         JSONObject := JSONToken.AsObject();
