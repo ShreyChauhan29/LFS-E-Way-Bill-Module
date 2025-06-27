@@ -8,12 +8,12 @@ tableextension 73100 "LFS GST Registration Nos. Ext." extends "GST Registration 
     {
         field(73100; "LFS E-Way Bill APIClientSecret"; Text[100])
         {
-            Caption = 'E-Way Bill API Client Secret';
+            Caption = 'E-Way Bill via IRN Client Secret';
             DataClassification = CustomerContent;
         }
         field(73101; "LFS E-Way Bill/Invoice API URL"; Text[100])
         {
-            Caption = 'E-Way Bill/Invoice API URL';
+            Caption = 'E-Way Bill via IRN API URL';
             DataClassification = CustomerContent;
         }
         field(73102; "LFS E-Way Bill API UserName"; Text[100])
@@ -28,12 +28,12 @@ tableextension 73100 "LFS GST Registration Nos. Ext." extends "GST Registration 
         }
         field(73104; "LFS E-Way Bill API IP Address"; Text[100])
         {
-            Caption = 'E-Way Bill API IP Address';
+            Caption = 'E-Way Bill via IRN IP Address';
             DataClassification = CustomerContent;
         }
         field(73105; "LFS E-Way Bill API ClientID"; Text[100])
         {
-            Caption = 'E-Way Bill API Client ID';
+            Caption = 'E-Way Bill via IRN Client ID';
             DataClassification = CustomerContent;
         }
         field(73106; "LFS E-Way Bill PrivateKey"; Text[30])
@@ -53,7 +53,7 @@ tableextension 73100 "LFS GST Registration Nos. Ext." extends "GST Registration 
         }
         field(73109; "LFS E-Way Bill AuthenticateURL"; Text[100])
         {
-            Caption = 'E-Way Bill Authenticate URL';
+            Caption = 'E-Way Bill via IRN Authenticate URL';
             DataClassification = CustomerContent;
         }
         field(73110; "LFS E-Way Bill IP Address"; Text[100])
