@@ -246,8 +246,10 @@ codeunit 73100 "E-Way Bill Generation"
                 WriteToGlbTextVar('TransId', ShippingAgent."GST Registration No.", 0, TRUE);
                 WriteToGlbTextVar('TransName', DELCHR(ShippingAgent.Name, '=', '"^([^\"])*$"'), 0, TRUE);
             end;
-            WriteToGlbTextVar('TransDocDt', Format(PostedSalesInvoice."Document Date", 0, '<Day,2>/<Month,2>/<Year4>'), 0, TRUE);
-            WriteToGlbTextVar('TransDocNo', PostedSalesInvoice."No.", 0, TRUE);
+            // WriteToGlbTextVar('TransDocDt', Format(PostedSalesInvoice."Document Date", 0, '<Day,2>/<Month,2>/<Year4>'), 0, TRUE);
+            // WriteToGlbTextVar('TransDocNo', PostedSalesInvoice."No.", 0, TRUE);
+            WriteToGlbTextVar('TransDocDt', 'null', 0, TRUE);
+            WriteToGlbTextVar('TransDocNo', 'null', 0, TRUE);
             if PostedSalesInvoice."Vehicle No." <> '' then
                 WriteToGlbTextVar('VehNo', PostedSalesInvoice."Vehicle No.", 0, TRUE)
             else
@@ -301,8 +303,10 @@ codeunit 73100 "E-Way Bill Generation"
                 WriteToGlbTextVar('TransId', ShippingAgent."GST Registration No.", 0, TRUE);
                 WriteToGlbTextVar('TransName', DELCHR(ShippingAgent.Name, '=', '"^([^\"])*$"'), 0, TRUE);
             end;
-            WriteToGlbTextVar('TransDocDt', Format(PostedTransferShipment."Posting Date", 0, '<Day,2>/<Month,2>/<Year4>'), 0, TRUE);
-            WriteToGlbTextVar('TransDocNo', PostedTransferShipment."No.", 0, TRUE);
+            // WriteToGlbTextVar('TransDocDt', Format(PostedTransferShipment."Posting Date", 0, '<Day,2>/<Month,2>/<Year4>'), 0, TRUE);
+            // WriteToGlbTextVar('TransDocNo', PostedTransferShipment."No.", 0, TRUE);
+            WriteToGlbTextVar('TransDocDt', 'null', 0, TRUE);
+            WriteToGlbTextVar('TransDocNo', 'null', 0, TRUE);
             if PostedTransferShipment."Vehicle No." <> '' then
                 WriteToGlbTextVar('VehNo', PostedTransferShipment."Vehicle No.", 0, TRUE)
             else
