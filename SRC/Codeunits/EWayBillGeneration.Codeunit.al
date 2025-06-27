@@ -226,18 +226,21 @@ codeunit 73100 "E-Way Bill Generation"
             WriteToGlbTextVar('ACTION', 'EWAYBILL', 0, TRUE);
             WriteToGlbTextVar('Irn', PostedSalesInvoice."IRN Hash", 0, TRUE);
             WriteToGlbTextVar('Distance', '0', 0, TRUE);
-            if PostedSalesInvoice."LFS Mode of Transport" <> PostedSalesInvoice."LFS Mode of Transport"::"0" then
-                if PostedSalesInvoice."LFS Mode of Transport" <> PostedSalesInvoice."LFS Mode of Transport"::"0" then
-                    case PostedSalesInvoice."LFS Mode of Transport" of
-                        PostedSalesInvoice."LFS Mode of Transport"::"1":
-                            WriteToGlbTextVar('TransMode', '1', 0, TRUE);
-                        PostedSalesInvoice."LFS Mode of Transport"::"2":
-                            WriteToGlbTextVar('TransMode', '2', 0, TRUE);
-                        PostedSalesInvoice."LFS Mode of Transport"::"3":
-                            WriteToGlbTextVar('TransMode', '3', 0, TRUE);
-                        PostedSalesInvoice."LFS Mode of Transport"::"4":
-                            WriteToGlbTextVar('TransMode', '4', 0, TRUE);
-                    end
+            if PostedSalesInvoice."Vehicle No." <> '' then
+                if (PostedSalesInvoice."LFS Mode of Transport" <> PostedSalesInvoice."LFS Mode of Transport"::"0") then
+                    if PostedSalesInvoice."LFS Mode of Transport" <> PostedSalesInvoice."LFS Mode of Transport"::"0" then
+                        case PostedSalesInvoice."LFS Mode of Transport" of
+                            PostedSalesInvoice."LFS Mode of Transport"::"1":
+                                WriteToGlbTextVar('TransMode', '1', 0, TRUE);
+                            PostedSalesInvoice."LFS Mode of Transport"::"2":
+                                WriteToGlbTextVar('TransMode', '2', 0, TRUE);
+                            PostedSalesInvoice."LFS Mode of Transport"::"3":
+                                WriteToGlbTextVar('TransMode', '3', 0, TRUE);
+                            PostedSalesInvoice."LFS Mode of Transport"::"4":
+                                WriteToGlbTextVar('TransMode', '4', 0, TRUE);
+                        end
+                    else
+                        WriteToGlbTextVar('TransMode', 'null', 1, TRUE)
                 else
                     WriteToGlbTextVar('TransMode', 'null', 1, TRUE);
             ShippingAgent.Reset();
@@ -248,8 +251,8 @@ codeunit 73100 "E-Way Bill Generation"
             end;
             // WriteToGlbTextVar('TransDocDt', Format(PostedSalesInvoice."Document Date", 0, '<Day,2>/<Month,2>/<Year4>'), 0, TRUE);
             // WriteToGlbTextVar('TransDocNo', PostedSalesInvoice."No.", 0, TRUE);
-            WriteToGlbTextVar('TransDocDt', 'null', 0, TRUE);
-            WriteToGlbTextVar('TransDocNo', 'null', 0, TRUE);
+            WriteToGlbTextVar('TransDocDt', 'null', 1, TRUE);
+            WriteToGlbTextVar('TransDocNo', 'null', 1, TRUE);
             if PostedSalesInvoice."Vehicle No." <> '' then
                 WriteToGlbTextVar('VehNo', PostedSalesInvoice."Vehicle No.", 0, TRUE)
             else
@@ -284,17 +287,20 @@ codeunit 73100 "E-Way Bill Generation"
             WriteToGlbTextVar('ACTION', 'EWAYBILL', 0, TRUE);
             WriteToGlbTextVar('Irn', PostedTransferShipment."IRN Hash", 0, TRUE);
             WriteToGlbTextVar('Distance', '0', 0, TRUE);
-            if PostedTransferShipment."LFS Mode of Transport" <> PostedTransferShipment."LFS Mode of Transport"::"0" then
-                case PostedTransferShipment."LFS Mode of Transport" of
-                    PostedTransferShipment."LFS Mode of Transport"::"1":
-                        WriteToGlbTextVar('TransMode', '1', 0, TRUE);
-                    PostedTransferShipment."LFS Mode of Transport"::"2":
-                        WriteToGlbTextVar('TransMode', '2', 0, TRUE);
-                    PostedTransferShipment."LFS Mode of Transport"::"3":
-                        WriteToGlbTextVar('TransMode', '3', 0, TRUE);
-                    PostedTransferShipment."LFS Mode of Transport"::"4":
-                        WriteToGlbTextVar('TransMode', '4', 0, TRUE);
-                end
+            if PostedTransferShipment."Vehicle No." <> '' then
+                if PostedTransferShipment."LFS Mode of Transport" <> PostedTransferShipment."LFS Mode of Transport"::"0" then
+                    case PostedTransferShipment."LFS Mode of Transport" of
+                        PostedTransferShipment."LFS Mode of Transport"::"1":
+                            WriteToGlbTextVar('TransMode', '1', 0, TRUE);
+                        PostedTransferShipment."LFS Mode of Transport"::"2":
+                            WriteToGlbTextVar('TransMode', '2', 0, TRUE);
+                        PostedTransferShipment."LFS Mode of Transport"::"3":
+                            WriteToGlbTextVar('TransMode', '3', 0, TRUE);
+                        PostedTransferShipment."LFS Mode of Transport"::"4":
+                            WriteToGlbTextVar('TransMode', '4', 0, TRUE);
+                    end
+                else
+                    WriteToGlbTextVar('TransMode', 'null', 1, TRUE)
             else
                 WriteToGlbTextVar('TransMode', 'null', 1, TRUE);
             ShippingAgent.Reset();
@@ -305,8 +311,8 @@ codeunit 73100 "E-Way Bill Generation"
             end;
             // WriteToGlbTextVar('TransDocDt', Format(PostedTransferShipment."Posting Date", 0, '<Day,2>/<Month,2>/<Year4>'), 0, TRUE);
             // WriteToGlbTextVar('TransDocNo', PostedTransferShipment."No.", 0, TRUE);
-            WriteToGlbTextVar('TransDocDt', 'null', 0, TRUE);
-            WriteToGlbTextVar('TransDocNo', 'null', 0, TRUE);
+            WriteToGlbTextVar('TransDocDt', 'null', 1, TRUE);
+            WriteToGlbTextVar('TransDocNo', 'null', 1, TRUE);
             if PostedTransferShipment."Vehicle No." <> '' then
                 WriteToGlbTextVar('VehNo', PostedTransferShipment."Vehicle No.", 0, TRUE)
             else

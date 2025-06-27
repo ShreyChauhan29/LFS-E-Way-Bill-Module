@@ -79,6 +79,9 @@ pageextension 73104 "LFS Posted Sales Invoice Ext." extends "Posted Sales Invoic
                     var
                         EWayBillAPI: Codeunit "E-Way Bill Generation";
                     begin
+                        Rec.TestField("IRN Hash");
+                        Rec.TestField("Shipping Agent Code");
+                        Rec.TestField("LFS Mode of Transport");
                         if Rec."IRN Hash" <> '' then begin
                             Clear(EWayBillAPI);
                             EWayBillAPI.GenerateSalesInvoiceDetails(Rec."No.");

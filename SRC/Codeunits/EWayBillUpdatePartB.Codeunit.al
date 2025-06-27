@@ -31,6 +31,7 @@ codeunit 73101 "LFS E-Way Bill Update Part-B"
         JSONObject: JsonObject;
         JSONToken: JsonToken;
         ValueJSONToken: JsonToken;
+        JSONValue: JsonValue;
         JSONArray: JsonArray;
         i: Integer;
         OutStream: OutStream;
@@ -43,7 +44,7 @@ codeunit 73101 "LFS E-Way Bill Update Part-B"
         HttpContent.GetHeaders(HttpHeader);
         HttpHeader.Add('PRIVATEKEY', GSTRegNos."LFS E-Way Bill PrivateKey");
         HttpHeader.Add('PRIVATEVALUE', GSTRegNos."LFS E-Way Bill PrivateValue");
-        HttpHeader.Add('IP', GSTRegNos."LFS E-Way Bill API IP Address");
+        HttpHeader.Add('IP', GSTRegNos."LFS E-Way Bill IP Address");
         HttpHeader.Remove('Content-Type');
         HttpHeader.Add('Content-Type', 'application/json');
         HttpRequest.Content(HttpContent);
@@ -62,8 +63,32 @@ codeunit 73101 "LFS E-Way Bill Update Part-B"
                                     for i := 0 to JSONArray.Count() - 1 do begin
                                         JSONArray.Get(i, JSONToken);
                                         JSONObject := JSONToken.AsObject();
-                                        JSONObject.Get('STATUS', JSONToken);
-                                        Status := JSONToken.AsValue().AsText();
+                                        // JSONObject.Get('STATUS', JSONToken);
+                                        // Status := JSONToken.AsValue().AsText();
+                                        if JSONObject.Get('Remarks', JSONToken) then begin
+                                            if JSONToken.IsValue() then begin
+                                                JSONValue := JSONToken.AsValue();
+
+                                                if not JSONValue.IsNull() then
+                                                    Evaluate(Remarks, JSONValue.AsText())
+                                                else
+                                                    Remarks := '';
+                                            end else
+                                                Remarks := ''; // Not a value type
+                                        end else
+                                            Remarks := ''; // Key doesn't exist
+                                        if JSONObject.Get('Status', valueJSONToken) then begin
+                                            if valueJSONToken.IsValue then begin
+                                                JSONValue := valueJSONToken.AsValue();
+                                                if not JSONValue.IsNull() then
+                                                    Evaluate(Status, JSONValue.AsText())
+                                                else
+                                                    Status := '';
+                                            end else
+                                                Status := '';
+                                        end else
+                                            Status := '';
+
                                         if Status = 'FAILED' then
                                             Error('Status : %1\ %2', Remarks, Status);
 
@@ -73,9 +98,9 @@ codeunit 73101 "LFS E-Way Bill Update Part-B"
                                             if PostedSalesInvoice.FindFirst() then begin
                                                 JSONObject.Get('EwbNo', valueJSONToken);
                                                 JSONObject.Get('ValidUptoDate', valueJSONToken);
-                                                PostedSalesInvoice."LFS E-Way Bill Valid Upto Date" := valueJSONToken.AsValue().AsDateTime();
+                                                PostedSalesInvoice."LFS E-Way Bill Valid Upto Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
                                                 JSONObject.Get('VechileUpdateDate', valueJSONToken);
-                                                PostedSalesInvoice."LFS E-Way Bill VehicleUpdtDate" := valueJSONToken.AsValue().AsDateTime();
+                                                PostedSalesInvoice."LFS E-Way Bill VehicleUpdtDate" := SetEWBDatetimeFromJsonToken(valueJSONToken);
                                                 PostedSalesInvoice."LFS E-Way Bill Message".CreateOutStream(OutStream);
                                                 OutStream.WriteText(StrSubstNo(ReturnMsg, Remarks, Status));
                                                 PostedSalesInvoice.Modify();
@@ -85,9 +110,9 @@ codeunit 73101 "LFS E-Way Bill Update Part-B"
                                             if PostedTransferShipment.FindFirst() then begin
                                                 JSONObject.Get('EwbNo', valueJSONToken);
                                                 JSONObject.Get('ValidUptoDate', valueJSONToken);
-                                                PostedTransferShipment."LFS E-Way Bill Valid Upto Date" := valueJSONToken.AsValue().AsDateTime();
+                                                PostedTransferShipment."LFS E-Way Bill Valid Upto Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
                                                 JSONObject.Get('VechileUpdateDate', valueJSONToken);
-                                                PostedTransferShipment."LFS E-Way Bill VehicleUpdtDate" := valueJSONToken.AsValue().AsDateTime();
+                                                PostedTransferShipment."LFS E-Way Bill VehicleUpdtDate" := SetEWBDatetimeFromJsonToken(valueJSONToken);
                                                 PostedTransferShipment."LFS E-Way Bill Message".CreateOutStream(OutStream);
                                                 OutStream.WriteText(StrSubstNo(ReturnMsg, Remarks, Status));
                                                 PostedTransferShipment.Modify();
@@ -138,16 +163,16 @@ codeunit 73101 "LFS E-Way Bill Update Part-B"
             if PostedSalesInvoice."LFS Mode of Transport" <> PostedSalesInvoice."LFS Mode of Transport"::"0" then
                 case PostedSalesInvoice."LFS Mode of Transport" of
                     PostedSalesInvoice."LFS Mode of Transport"::"1":
-                        WriteToGlbTextVar('TransMode', '1', 0, TRUE);
+                        WriteToGlbTextVar('TransportMode', 'Road', 0, TRUE);
                     PostedSalesInvoice."LFS Mode of Transport"::"2":
-                        WriteToGlbTextVar('TransMode', '2', 0, TRUE);
+                        WriteToGlbTextVar('TransportMode', 'Rail', 0, TRUE);
                     PostedSalesInvoice."LFS Mode of Transport"::"3":
-                        WriteToGlbTextVar('TransMode', '3', 0, TRUE);
+                        WriteToGlbTextVar('TransportMode', 'Air', 0, TRUE);
                     PostedSalesInvoice."LFS Mode of Transport"::"4":
-                        WriteToGlbTextVar('TransMode', '4', 0, TRUE);
+                        WriteToGlbTextVar('TransportMode', 'Ship', 0, TRUE);
                 end
             else
-                WriteToGlbTextVar('TransMode', 'null', 1, TRUE);
+                WriteToGlbTextVar('TransportMode', 'null', 1, TRUE);
             if PostedSalesInvoice."Vehicle Type" <> PostedSalesInvoice."Vehicle Type"::" " then begin
                 if PostedSalesInvoice."Vehicle Type" = PostedSalesInvoice."Vehicle Type"::ODC then
                     WriteToGlbTextVar('VehicleType', 'O', 0, TRUE)
@@ -203,16 +228,16 @@ codeunit 73101 "LFS E-Way Bill Update Part-B"
             if PostedTransferShipment."LFS Mode of Transport" <> PostedTransferShipment."LFS Mode of Transport"::"0" then
                 case PostedTransferShipment."LFS Mode of Transport" of
                     PostedTransferShipment."LFS Mode of Transport"::"1":
-                        WriteToGlbTextVar('TransMode', '1', 0, TRUE);
+                        WriteToGlbTextVar('TransportMode', 'Road', 0, TRUE);
                     PostedTransferShipment."LFS Mode of Transport"::"2":
-                        WriteToGlbTextVar('TransMode', '2', 0, TRUE);
+                        WriteToGlbTextVar('TransportMode', 'Rail', 0, TRUE);
                     PostedTransferShipment."LFS Mode of Transport"::"3":
-                        WriteToGlbTextVar('TransMode', '3', 0, TRUE);
+                        WriteToGlbTextVar('TransportMode', 'Air', 0, TRUE);
                     PostedTransferShipment."LFS Mode of Transport"::"4":
-                        WriteToGlbTextVar('TransMode', '4', 0, TRUE);
+                        WriteToGlbTextVar('TransportMode', 'Ship', 0, TRUE);
                 end
             else
-                WriteToGlbTextVar('TransMode', 'null', 1, TRUE);
+                WriteToGlbTextVar('TransportMode', 'null', 1, TRUE);
             if PostedTransferShipment."Vehicle Type" <> PostedTransferShipment."Vehicle Type"::" " then begin
                 if PostedTransferShipment."Vehicle Type" = PostedTransferShipment."Vehicle Type"::ODC then
                     WriteToGlbTextVar('VehicleType', 'O', 0, TRUE)

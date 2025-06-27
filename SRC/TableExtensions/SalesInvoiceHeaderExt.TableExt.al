@@ -28,12 +28,12 @@ tableextension 73102 "LFS Sales Invoice Header Ext" extends "Sales Invoice Heade
         }
         field(73104; "LFS E-Way Bill Vehicle Reason"; Enum "LFS Vehicle Reason")
         {
-            Caption = 'E-Way Bill Vehicle Reason';
+            Caption = 'E-Way Bill Update Vehicle Reason';
             DataClassification = CustomerContent;
         }
         field(73105; "LFS E-Way Bill Remarks"; Text[500])
         {
-            Caption = 'E-Way Bill Remarks';
+            Caption = 'E-Way Bill Update Remarks';
             DataClassification = CustomerContent;
         }
         field(73106; "LFS E-Way Bill VehicleUpdtDate"; DateTime)
