@@ -81,6 +81,18 @@ pageextension 73108 "LFSPosted Transfer ShipmentExt" extends "Posted Transfer Sh
             group("E-Way Bill")
             {
                 Caption = 'E-Way Bill';
+                action("LFS Update Multiple Vehicle E-Way Bill")
+                {
+                    ApplicationArea = All;
+                    Image = UpdateDescription;
+                    Promoted = true;
+                    PromotedCategory = Category10;
+                    PromotedIsBig = true;
+                    Caption = 'Update Multiple Vehicle E-Way Bill';
+                    ToolTip = 'Specifies the Update Multiple Vehicle E-Way Bill';
+                    RunObject = page "LFS Multiple Vehicle E-WayBill";
+                    RunPageLink = "LFS Document No. " = field("No.");
+                }
                 action("LFS Generate E-Way Bill")
                 {
                     ApplicationArea = All;
