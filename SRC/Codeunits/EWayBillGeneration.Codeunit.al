@@ -15,6 +15,7 @@ codeunit 73100 "E-Way Bill Generation"
 
     var
         GlbTextVars, GlbTextVarAuth : Text;
+        IsHandle: Boolean;
 
     procedure AuthenticateAPI(GSTRegistrationNo: Code[20])
     var
@@ -250,7 +251,6 @@ codeunit 73100 "E-Way Bill Generation"
         PostedSalesInvoice: Record "Sales Invoice Header";
         ShippingAgent: Record "Shipping Agent";
         ExpShipDtlsJson: Text;
-        IsHandle: Boolean;
     begin
         PostedSalesInvoice.Reset();
         PostedSalesInvoice.SetRange("No.", InvoiceNo);
