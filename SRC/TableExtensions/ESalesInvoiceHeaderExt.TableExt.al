@@ -2,7 +2,7 @@ namespace LFSEWayBillModule.LFSEWayBillModule;
 
 using Microsoft.Sales.History;
 
-tableextension 73102 "LFS Sales Invoice Header Ext" extends "Sales Invoice Header"
+tableextension 73102 "LFS ESales Invoice Header Ext" extends "Sales Invoice Header"
 {
     fields
     {
