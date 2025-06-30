@@ -622,7 +622,7 @@ codeunit 73100 "E-Way Bill Generation"
             GlbTextVars += '}';
             GlbTextVars += ']';
             GlbTextVars += '}';
-            GlbTextVars += '}';
+            // GlbTextVars += '}';
             Message(GlbTextVars);
             GenerateEWayBillwithoutIRN(GlbTextVars, FromLocation."GST Registration No.", PostedTransferShipment."No.");
         end;
