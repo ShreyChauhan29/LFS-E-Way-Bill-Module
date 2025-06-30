@@ -17,6 +17,7 @@ codeunit 73101 "LFS E-Way Bill Update Part-B"
         GSTRegNos: Record "GST Registration Nos.";
         PostedSalesInvoice: Record "Sales Invoice Header";
         PostedTransferShipment: Record "Transfer Shipment Header";
+        PostedSalesCreditMemo: Record "Sales Cr.Memo Header";
         Remarks: Text;
         Status: Text;
 #pragma warning disable AA0470
@@ -105,6 +106,20 @@ codeunit 73101 "LFS E-Way Bill Update Part-B"
                                                 OutStream.WriteText(StrSubstNo(ReturnMsg, Remarks, Status));
                                                 PostedSalesInvoice.Modify();
                                             end;
+                                            //Update Posted Sales Credit Memo
+                                            PostedSalesCreditMemo.Reset();
+                                            PostedSalesCreditMemo.SetRange("No.", DocumentNo);
+                                            if PostedSalesCreditMemo.FindFirst() then begin
+                                                JSONObject.Get('EwbNo', valueJSONToken);
+                                                JSONObject.Get('ValidUptoDate', valueJSONToken);
+                                                PostedSalesCreditMemo."LFS E-Way Bill Valid Upto Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+                                                JSONObject.Get('VechileUpdateDate', valueJSONToken);
+                                                PostedSalesCreditMemo."LFS E-Way Bill VehicleUpdtDate" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+                                                PostedSalesCreditMemo."LFS E-Way Bill Message".CreateOutStream(OutStream);
+                                                OutStream.WriteText(StrSubstNo(ReturnMsg, Remarks, Status));
+                                                PostedSalesCreditMemo.Modify();
+                                            end;
+                                            // Update Posted Transfer Shipment
                                             PostedTransferShipment.Reset();
                                             PostedTransferShipment.SetRange("No.", DocumentNo);
                                             if PostedTransferShipment.FindFirst() then begin

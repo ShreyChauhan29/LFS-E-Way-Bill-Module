@@ -106,10 +106,15 @@ pageextension 73108 "LFSPosted Transfer ShipmentExt" extends "Posted Transfer Sh
                     trigger OnAction()
                     var
                         EInvoiceAPI: Codeunit "E-Way Bill Generation";
+                        GenerateEWayBillwithoutIRN: Codeunit "E-Way Bill Generation";
                     begin
                         if Rec."IRN Hash" <> '' then begin
                             Clear(EInvoiceAPI);
                             EInvoiceAPI.GenerateTransferShipmentDetails(Rec."No.");
+                        end
+                        else begin
+                            Clear(GenerateEWayBillwithoutIRN);
+                            GenerateEWayBillwithoutIRN.GenerateTransferShipmentBodywithoutIRN(Rec."No.");
                         end;
                     end;
                 }
