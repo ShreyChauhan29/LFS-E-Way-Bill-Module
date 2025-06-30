@@ -249,6 +249,10 @@ codeunit 73100 "E-Way Bill Generation"
     var
         PostedSalesInvoice: Record "Sales Invoice Header";
         ShippingAgent: Record "Shipping Agent";
+        RecRef: RecordRef;
+        FieldIDs: List of [Integer];
+        ExpShipDtlsJson: Text;
+        IsHandle: Boolean;
     begin
         PostedSalesInvoice.Reset();
         PostedSalesInvoice.SetRange("No.", InvoiceNo);
@@ -297,7 +301,17 @@ codeunit 73100 "E-Way Bill Generation"
                         WriteToGlbTextVar('VehType', 'R', 0, TRUE);
             end else
                 WriteToGlbTextVar('VehType', 'null', 1, TRUE);
-            WriteToGlbTextVar('ExpShipDtls', 'null', 1, TRUE);
+
+            ExpShipDtlsJson := 'null';
+            IsHandle := false;
+            OnBeforeExpShipDtlsWriteExt(PostedSalesInvoice, IsHandle, ExpShipDtlsJson);
+            // Emit ExpShipDtls
+            if IsHandle then
+                WriteToGlbTextVar('ExpShipDtls', ExpShipDtlsJson, 1, TRUE)
+            else
+                WriteToGlbTextVar('ExpShipDtls', 'null', 1, TRUE);
+
+            // WriteToGlbTextVar('ExpShipDtls', 'null', 1, TRUE);
             WriteToGlbTextVar('DispDtls', 'null', 1, false);
             GlbTextVars += '}';
             Message(GlbTextVars);
@@ -913,4 +927,59 @@ codeunit 73100 "E-Way Bill Generation"
                 DownloadFromStream(IStr, 'Select file path', 'D:\Downloads\', '', Response);
             end;
     end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeExpShipDtlsWriteExt(
+    SalesInvHeader: Record "Sales Invoice Header"; // Posted Sales Invoice record for additional context
+    IsHandle: Boolean;                      // Flag indicating if ExpShipDtls should be handled
+    var ExpShipDtlsJson: Text)              // Return variable: structured JSON or 'null'
+    begin
+        // ======================================================================================================
+        // PURPOSE:
+        // --------
+        // This event allows subscribers to inject the "ExpShipDtls" JSON object dynamically,
+        // based on the provided RecRef and list of field IDs, if `IsHandle = true`.
+        //
+        // If the subscriber builds the JSON and assigns it to `ExpShipDtlsJson`, it will be included
+        // in the final E-Way Bill request body in this format:
+        //
+        //   "ExpShipDtls": {
+        //       "Addr1": "123 Main St",
+        //       "Addr2": "Suite 456",
+        //       "Loc": "Gurgaon",
+        //       "Pin": "122015",
+        //       "Stcd": "06"
+        //   }
+        //
+        // If `IsHandle = false`, or the subscriber does not handle it, the system will default to:
+        //
+        //   "ExpShipDtls": null
+        //
+        // HOW TO USE IN A SUBSCRIBER:
+        // ---------------------------
+        // 1. Check if `IsHandle = true`. If not, exit.
+        // 2. Use RecRef to get the actual record (e.g., Customer).
+        // 3. Loop through FieldIDs to extract values.
+        // 4. Add values to a JsonObject with appropriate keys.
+        // 5. Convert JsonObject to text and assign it to `ExpShipDtlsJson`.
+        //
+        // EXAMPLE SUBSCRIBER BODY:
+        //
+        // if not IsHandle then
+        //     exit;
+        //
+        // if not Cust.Get(SalesInvHeader."Bill-to Customer No.") then
+        //     exit;
+        //
+        // JsonObject.Add('Addr1', Cust.Address);
+        // JsonObject.Add('Addr2', Cust."Address 2");
+        // JsonObject.Add('Loc', Cust.City);
+        // JsonObject.Add('Pin', Cust."Post Code");
+        // JsonObject.Add('Stcd', Cust."State Code");
+        //
+        // ExpShipDtlsJson := JsonObject.ToString();
+        //
+        // ======================================================================================================
+    end;
+
 }
