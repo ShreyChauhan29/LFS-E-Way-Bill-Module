@@ -249,8 +249,6 @@ codeunit 73100 "E-Way Bill Generation"
     var
         PostedSalesInvoice: Record "Sales Invoice Header";
         ShippingAgent: Record "Shipping Agent";
-        RecRef: RecordRef;
-        FieldIDs: List of [Integer];
         ExpShipDtlsJson: Text;
         IsHandle: Boolean;
     begin
