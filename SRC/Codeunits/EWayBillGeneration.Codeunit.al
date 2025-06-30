@@ -612,7 +612,6 @@ codeunit 73100 "E-Way Bill Generation"
             WriteToGlbTextVar('SGST_AMOUNT', FORMAT(ABS(SGSTVal), 0, 2), 1, TRUE);
             WriteToGlbTextVar('IGST_AMOUNT', FORMAT(ABS(IGSTVal), 0, 2), 1, TRUE);
             WriteToGlbTextVar('CESS_AMOUNT', FORMAT(ABS(0), 0, 2), 1, TRUE);
-
             WriteToGlbTextVar('TOTAL_TAXABLE_VALUE', FORMAT(ABS(AssVal), 0, 2), 1, TRUE);
             WriteToGlbTextVar('OTHER_VALUE', FORMAT(TCSAmount, 0, 2), 1, TRUE);
             WriteToGlbTextVar('TOTAL_INVOICE_VALUE', FORMAT(abs(TotalInvVal), 0, 2), 1, true);
