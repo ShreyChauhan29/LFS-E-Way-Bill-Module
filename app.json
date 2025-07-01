@@ -2,7 +2,7 @@
   "id": "e3acfd99-180e-4944-84b5-3b49d83caa6d",
   "name": "LFS E-Way Bill Module",
   "publisher": "Leaping Frog Solutions Pvt. Ltd.",
-  "version": "1.0.0.5",
+  "version": "1.0.0.6",
   "brief": "E-Way Bill Module for LFSPL",
   "description": "This module provides E-Way Bill functionality for the LFSPL system.",
   "privacyStatement": "",

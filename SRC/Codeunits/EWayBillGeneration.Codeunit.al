@@ -929,7 +929,7 @@ codeunit 73100 "E-Way Bill Generation"
     [IntegrationEvent(false, false)]
     procedure OnBeforeExpShipDtlsWriteExt(
     SalesInvHeader: Record "Sales Invoice Header"; // Posted Sales Invoice record for additional context
-    IsHandle: Boolean;                      // Flag indicating if ExpShipDtls should be handled
+    var IsHandle: Boolean;                      // Flag indicating if ExpShipDtls should be handled
     var ExpShipDtlsJson: Text)              // Return variable: structured JSON or 'null'
     begin
         // ======================================================================================================
