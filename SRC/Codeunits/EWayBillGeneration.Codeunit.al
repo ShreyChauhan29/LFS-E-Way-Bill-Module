@@ -165,12 +165,12 @@ codeunit 73100 "E-Way Bill Generation"
                                                     PostedSalesInvoice."E-Way Bill No." := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedSalesInvoice."E-Way Bill No."));
 
                                                 if JSONObject.Get('EwbDt', valueJSONToken) then
-                                                    PostedSalesInvoice."LFS E-Way Bill Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+                                                    PostedSalesInvoice."LFS E-Way Bill Date" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedSalesInvoice."LFS E-Way Bill Date"));
 
                                                 if JSONObject.Get('EwbValidTill', valueJSONToken) then begin
                                                     JsonValue := valueJSONToken.AsValue();
                                                     if not JSONValue.IsNull() then
-                                                        PostedSalesInvoice."LFS E-Way Bill Valid Upto Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+                                                        PostedSalesInvoice."LFS E-Way Bill Valid Upto Date" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedSalesInvoice."LFS E-Way Bill Valid Upto Date"));
                                                 end;
 
                                                 PostedSalesInvoice."LFS E-Way Bill Message".CreateOutStream(OutStream);
@@ -186,12 +186,12 @@ codeunit 73100 "E-Way Bill Generation"
                                                     PostedSalesCreditMemo."E-Way Bill No." := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedSalesCreditMemo."E-Way Bill No."));
 
                                                 if JSONObject.Get('EwbDt', valueJSONToken) then
-                                                    PostedSalesCreditMemo."LFS E-Way Bill Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+                                                    PostedSalesCreditMemo."LFS E-Way Bill Date" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedSalesCreditMemo."LFS E-Way Bill Date"));
 
                                                 if JSONObject.Get('EwbValidTill', valueJSONToken) then begin
                                                     JsonValue := valueJSONToken.AsValue();
                                                     if not JSONValue.IsNull() then
-                                                        PostedSalesCreditMemo."LFS E-Way Bill Valid Upto Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+                                                        PostedSalesCreditMemo."LFS E-Way Bill Valid Upto Date" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedSalesCreditMemo."LFS E-Way Bill Valid Upto Date"));
                                                 end;
 
                                                 PostedSalesCreditMemo."LFS E-Way Bill Message".CreateOutStream(OutStream);
@@ -212,7 +212,8 @@ codeunit 73100 "E-Way Bill Generation"
                                                 if JSONObject.Get('EwbValidTill', valueJSONToken) then begin
                                                     JsonValue := valueJSONToken.AsValue();
                                                     if not JSONValue.IsNull() then
-                                                        PostedTransferShipment."LFS E-Way Bill Valid Upto Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+                                                        PostedTransferShipment."LFS E-Way Bill Valid Upto Date" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedTransferShipment."LFS E-Way Bill Valid Upto Date"));
+                                                    ;
                                                 end;
 
                                                 PostedTransferShipment."LFS E-Way Bill Message".CreateOutStream(OutStream);
@@ -811,7 +812,7 @@ codeunit 73100 "E-Way Bill Generation"
                                         JSONObject.Get('EWB_DATE', ValueJSONToken);
                                         PostedTransferShipment."LFS E-Way Bill Date" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedTransferShipment."LFS E-Way Bill Date"));
                                         JSONObject.Get('VALID_UPTO_DATE', ValueJSONToken);
-                                        PostedTransferShipment."LFS E-Way Bill Valid Upto Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+                                        PostedTransferShipment."LFS E-Way Bill Valid Upto Date" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedTransferShipment."LFS E-Way Bill Valid Upto Date"));
                                         PostedTransferShipment."LFS E-Way Bill Message".CreateOutStream(OSStream);
                                         OSStream.WriteText(StrSubstNo(ReturnMsg, Remarks, Status));
                                         PostedTransferShipment.Modify();

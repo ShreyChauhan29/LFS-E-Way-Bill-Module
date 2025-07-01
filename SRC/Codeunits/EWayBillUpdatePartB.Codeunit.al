@@ -99,9 +99,9 @@ codeunit 73101 "LFS E-Way Bill Update Part-B"
                                             if PostedSalesInvoice.FindFirst() then begin
                                                 JSONObject.Get('EwbNo', valueJSONToken);
                                                 JSONObject.Get('ValidUptoDate', valueJSONToken);
-                                                PostedSalesInvoice."LFS E-Way Bill Valid Upto Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+                                                PostedSalesInvoice."LFS E-Way Bill Valid Upto Date" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedSalesInvoice."LFS E-Way Bill Valid Upto Date"));
                                                 JSONObject.Get('VechileUpdateDate', valueJSONToken);
-                                                PostedSalesInvoice."LFS E-Way Bill VehicleUpdtDate" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+                                                PostedSalesInvoice."LFS E-Way Bill VehicleUpdtDate" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedSalesInvoice."LFS E-Way Bill VehicleUpdtDate"));
                                                 PostedSalesInvoice."LFS E-Way Bill Message".CreateOutStream(OutStream);
                                                 OutStream.WriteText(StrSubstNo(ReturnMsg, Remarks, Status));
                                                 PostedSalesInvoice.Modify();
@@ -112,9 +112,9 @@ codeunit 73101 "LFS E-Way Bill Update Part-B"
                                             if PostedSalesCreditMemo.FindFirst() then begin
                                                 JSONObject.Get('EwbNo', valueJSONToken);
                                                 JSONObject.Get('ValidUptoDate', valueJSONToken);
-                                                PostedSalesCreditMemo."LFS E-Way Bill Valid Upto Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+                                                PostedSalesCreditMemo."LFS E-Way Bill Valid Upto Date" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedSalesCreditMemo."LFS E-Way Bill Valid Upto Date"));
                                                 JSONObject.Get('VechileUpdateDate', valueJSONToken);
-                                                PostedSalesCreditMemo."LFS E-Way Bill VehicleUpdtDate" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+                                                PostedSalesCreditMemo."LFS E-Way Bill VehicleUpdtDate" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedSalesCreditMemo."LFS E-Way Bill VehicleUpdtDate"));
                                                 PostedSalesCreditMemo."LFS E-Way Bill Message".CreateOutStream(OutStream);
                                                 OutStream.WriteText(StrSubstNo(ReturnMsg, Remarks, Status));
                                                 PostedSalesCreditMemo.Modify();
@@ -125,9 +125,9 @@ codeunit 73101 "LFS E-Way Bill Update Part-B"
                                             if PostedTransferShipment.FindFirst() then begin
                                                 JSONObject.Get('EwbNo', valueJSONToken);
                                                 JSONObject.Get('ValidUptoDate', valueJSONToken);
-                                                PostedTransferShipment."LFS E-Way Bill Valid Upto Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+                                                PostedTransferShipment."LFS E-Way Bill Valid Upto Date" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedTransferShipment."LFS E-Way Bill Valid Upto Date"));
                                                 JSONObject.Get('VechileUpdateDate', valueJSONToken);
-                                                PostedTransferShipment."LFS E-Way Bill VehicleUpdtDate" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+                                                PostedTransferShipment."LFS E-Way Bill VehicleUpdtDate" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedTransferShipment."LFS E-Way Bill VehicleUpdtDate"));
                                                 PostedTransferShipment."LFS E-Way Bill Message".CreateOutStream(OutStream);
                                                 OutStream.WriteText(StrSubstNo(ReturnMsg, Remarks, Status));
                                                 PostedTransferShipment.Modify();

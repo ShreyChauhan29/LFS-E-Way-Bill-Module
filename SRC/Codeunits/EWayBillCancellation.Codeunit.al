@@ -72,7 +72,7 @@ codeunit 73104 "LFS E-Way Bill Cancellation"
                                             if PostedSalesInvoice.FindFirst() then begin
                                                 JsonObject.Get('CancelDate', ValueJsonToken);
                                                 if not ValueJsonToken.AsValue().IsNull then begin
-                                                    PostedSalesInvoice."LFS E-Way Bill Cancel Date" := valueJSONToken.AsValue().AsDateTime();
+                                                    PostedSalesInvoice."LFS E-Way Bill Cancel Date" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedSalesInvoice."LFS E-Way Bill Cancel Date"));
                                                     PostedSalesInvoice.Modify();
                                                 end;
                                             end;
@@ -81,7 +81,7 @@ codeunit 73104 "LFS E-Way Bill Cancellation"
                                             if PostedTransferShipment.FindFirst() then begin
                                                 JsonObject.Get('CancelDate', ValueJsonToken);
                                                 if not ValueJsonToken.AsValue().IsNull then begin
-                                                    PostedTransferShipment."LFS E-Way Bill Cancel Date" := valueJSONToken.AsValue().AsDateTime();
+                                                    PostedTransferShipment."LFS E-Way Bill Cancel Date" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedTransferShipment."LFS E-Way Bill Cancel Date"));
                                                     PostedTransferShipment.Modify();
                                                 end;
                                             end;

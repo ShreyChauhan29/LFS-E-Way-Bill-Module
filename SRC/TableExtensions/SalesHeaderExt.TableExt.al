@@ -11,12 +11,12 @@ tableextension 73101 "LFS Sales Header Ext." extends "Sales Header"
             Caption = 'Mode of Transport';
             DataClassification = CustomerContent;
         }
-        field(73101; "LFS E-Way Bill Date"; DateTime)
+        field(73101; "LFS E-Way Bill Date"; Text[20])
         {
             Caption = 'E-Way Bill Date';
             DataClassification = CustomerContent;
         }
-        field(73102; "LFS E-Way Bill Valid Upto Date"; DateTime)
+        field(73102; "LFS E-Way Bill Valid Upto Date"; Text[20])
         {
             Caption = 'E-Way Bill Valid Upto Date';
             DataClassification = CustomerContent;
@@ -36,17 +36,17 @@ tableextension 73101 "LFS Sales Header Ext." extends "Sales Header"
             Caption = 'E-Way Bill Remarks';
             DataClassification = CustomerContent;
         }
-        field(73106; "LFS E-Way Bill VehicleUpdtDate"; DateTime)
+        field(73106; "LFS E-Way Bill VehicleUpdtDate"; Text[20])
         {
             Caption = 'E-Way Bill Vehicle Updated Date';
             DataClassification = CustomerContent;
         }
-        field(73107; "LFS E-Way Bill TransporterDate"; DateTime)
+        field(73107; "LFS E-Way Bill TransporterDate"; Text[20])
         {
             Caption = 'E-Way Bill Transporter Updated Date';
             DataClassification = CustomerContent;
         }
-        field(73108; "LFS E-Way Bill Cancel Date"; DateTime)
+        field(73108; "LFS E-Way Bill Cancel Date"; Text[20])
         {
             Caption = 'E-Way Bill Cancel Date';
             DataClassification = CustomerContent;

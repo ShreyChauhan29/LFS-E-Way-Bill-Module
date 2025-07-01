@@ -43,7 +43,7 @@ codeunit 73103 "LFS EWay Bill Updt Transporter"
         HttpContent.GetHeaders(HttpHeader);
         HttpHeader.Add('PRIVATEKEY', GSTRegNos."LFS E-Way Bill PrivateKey");
         HttpHeader.Add('PRIVATEVALUE', GSTRegNos."LFS E-Way Bill PrivateValue");
-        HttpHeader.Add('IP', GSTRegNos."LFS E-Way Bill API IP Address");
+        HttpHeader.Add('IP', GSTRegNos."LFS E-Way Bill IP Address");
         HttpHeader.Remove('Content-Type');
         HttpHeader.Add('Content-Type', 'application/json');
         HttpRequest.Content(HttpContent);
@@ -75,7 +75,7 @@ codeunit 73103 "LFS EWay Bill Updt Transporter"
                                             if PostedSalesInvoice.FindFirst() then begin
                                                 JSONObject.Get('EwbNo', valueJSONToken);
                                                 JSONObject.Get('Transporter_Date', valueJSONToken);
-                                                PostedSalesInvoice."LFS E-Way Bill TransporterDate" := valueJSONToken.AsValue().AsDateTime();
+                                                PostedSalesInvoice."LFS E-Way Bill TransporterDate" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedSalesInvoice."LFS E-Way Bill TransporterDate"));
                                                 PostedSalesInvoice."LFS E-Way Bill Message".CreateOutStream(OutStream);
                                                 OutStream.WriteText(StrSubstNo(ReturnMsg, Remarks, Status));
                                                 PostedSalesInvoice.Modify();
@@ -85,7 +85,7 @@ codeunit 73103 "LFS EWay Bill Updt Transporter"
                                             if PostedTransferShipment.FindFirst() then begin
                                                 JSONObject.Get('EwbNo', valueJSONToken);
                                                 JSONObject.Get('Transporter_Date', valueJSONToken);
-                                                PostedTransferShipment."LFS E-Way Bill TransporterDate" := valueJSONToken.AsValue().AsDateTime();
+                                                PostedTransferShipment."LFS E-Way Bill TransporterDate" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedTransferShipment."LFS E-Way Bill TransporterDate"));
                                                 PostedTransferShipment."LFS E-Way Bill Message".CreateOutStream(OutStream);
                                                 OutStream.WriteText(StrSubstNo(ReturnMsg, Remarks, Status));
                                                 PostedTransferShipment.Modify();

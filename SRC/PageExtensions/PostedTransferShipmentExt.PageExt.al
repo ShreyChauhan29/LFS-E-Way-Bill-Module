@@ -19,27 +19,35 @@ pageextension 73108 "LFSPosted Transfer ShipmentExt" extends "Posted Transfer Sh
         {
             Editable = true;
         }
+        modify("E-Way Bill No.")
+        {
+            Editable = false;
+        }
         addafter("E-Way Bill No.")
         {
             field("LFS E-Way Bill Date"; Rec."LFS E-Way Bill Date")
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the LFS E-Way Bill Date field.', Comment = '%';
+                Editable = false;
             }
             field("LFS E-Way Bill Valid Upto Date"; Rec."LFS E-Way Bill Valid Upto Date")
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the LFS E-Way Bill Valid Upto Date field.', Comment = '%';
+                Editable = false;
             }
             field("LFS E-Way Bill VehicleUpdtDate"; Rec."LFS E-Way Bill VehicleUpdtDate")
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the E-Way Bill Vehicle Updated Date field.', Comment = '%';
+                Editable = false;
             }
             field("LFS E-Way Bill TransporterDate"; Rec."LFS E-Way Bill TransporterDate")
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the E-Way Bill Transporter Updated Date field.', Comment = '%';
+                Editable = false;
             }
             field("LFS E-Way Bill Vehicle Reason"; Rec."LFS E-Way Bill Vehicle Reason")
             {
@@ -61,6 +69,7 @@ pageextension 73108 "LFSPosted Transfer ShipmentExt" extends "Posted Transfer Sh
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the value of the E-Way Bill Cancel Date field.', Comment = '%';
+                Editable = false;
             }
             field("LFS E-Way Bill Cancel Reason"; Rec."LFS E-Way Bill Cancel Reason")
             {
@@ -135,7 +144,12 @@ pageextension 73108 "LFSPosted Transfer ShipmentExt" extends "Posted Transfer Sh
                     var
                         UpdatePartB: Codeunit "LFS E-Way Bill Update Part-B";
                     begin
-                        if (Rec."IRN Hash" <> '') AND (Rec."E-Way Bill No." <> '') then begin
+                        Rec.TestField("LFS Mode of Transport");
+                        Rec.TestField("E-Way Bill No.");
+                        Rec.TestField("Vehicle No.");
+                        Rec.TestField("Vehicle Type");
+                        Rec.TestField("LFS E-Way Bill Vehicle Reason");
+                        if (Rec."E-Way Bill No." <> '') then begin
                             Clear(UpdatePartB);
                             UpdatePartB.GenerateTransferShipmentDetails(Rec."No.");
                         end;
@@ -154,7 +168,7 @@ pageextension 73108 "LFSPosted Transfer ShipmentExt" extends "Posted Transfer Sh
                     var
                         UpdateTransporter: Codeunit "LFS EWay Bill Updt Transporter";
                     begin
-                        if (Rec."IRN Hash" <> '') AND (Rec."E-Way Bill No." <> '') AND (Rec."Shipping Agent Code" <> '') then begin
+                        if (Rec."E-Way Bill No." <> '') AND (Rec."Shipping Agent Code" <> '') then begin
                             Clear(UpdateTransporter);
                             UpdateTransporter.GenerateTransferShipmentDetails(Rec."No.");
                         end;
@@ -226,7 +240,7 @@ pageextension 73108 "LFSPosted Transfer ShipmentExt" extends "Posted Transfer Sh
                     var
                         EWayBillAPI: Codeunit "LFS Multiple Vehicle E-WayBill";
                     begin
-                        if (Rec."IRN Hash" <> '') and (Rec."E-Way Bill No." <> '') then begin
+                        if (Rec."E-Way Bill No." <> '') then begin
                             Clear(EWayBillAPI);
                             EWayBillAPI.GenerateTransferShipmentDetails(Rec."No.");
                         end;
@@ -245,7 +259,7 @@ pageextension 73108 "LFSPosted Transfer ShipmentExt" extends "Posted Transfer Sh
                     var
                         EWayBillAPI: Codeunit "LFS Multi Vehicle UpdatePart-B";
                     begin
-                        if (Rec."IRN Hash" <> '') and (Rec."E-Way Bill No." <> '') then begin
+                        if (Rec."E-Way Bill No." <> '') then begin
                             Clear(EWayBillAPI);
                             EWayBillAPI.GenerateTransferShipmentDetails(Rec."No.");
                         end;
