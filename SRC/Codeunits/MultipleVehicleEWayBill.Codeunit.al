@@ -40,12 +40,12 @@ codeunit 73105 "LFS Multiple Vehicle E-WayBill"
         GSTRegNos.Reset();
         GSTRegNos.Get(GSTRegistrationNo);
         HttpRequest.Method := 'POST';
-        HttpRequest.SetRequestUri(GSTRegNos."LFS E-Way Bill/Invoice API URL");
+        HttpRequest.SetRequestUri(GSTRegNos."LFS E-Way Bill API URL");
         HttpContent.WriteFrom(GlbTextVar);
         HttpContent.GetHeaders(HttpHeader);
         HttpHeader.Add('PRIVATEKEY', GSTRegNos."LFS E-Way Bill PrivateKey");
         HttpHeader.Add('PRIVATEVALUE', GSTRegNos."LFS E-Way Bill PrivateValue");
-        HttpHeader.Add('IP', GSTRegNos."LFS E-Way Bill API IP Address");
+        HttpHeader.Add('IP', GSTRegNos."LFS E-Way Bill IP Address");
         HttpHeader.Remove('Content-Type');
         HttpHeader.Add('Content-Type', 'application/json');
         HttpRequest.Content(HttpContent);
@@ -64,9 +64,9 @@ codeunit 73105 "LFS Multiple Vehicle E-WayBill"
                                     for i := 0 to JSONArray.Count() - 1 do begin
                                         JSONArray.Get(i, JSONToken);
                                         JSONObject := JSONToken.AsObject();
-                                        JSONObject.Get('REMARKS', JSONToken);
+                                        JSONObject.Get('Remarks', JSONToken);
                                         Remarks := JSONToken.AsValue().AsText();
-                                        JSONObject.Get('STATUS', JSONToken);
+                                        JSONObject.Get('Status', JSONToken);
                                         Status := JSONToken.AsValue().AsText();
                                         if Status = 'FAILED' then
                                             Error('Status : %1\ %2', Remarks, Status);
@@ -93,12 +93,14 @@ codeunit 73105 "LFS Multiple Vehicle E-WayBill"
                                                 JSONObject.Get('groupNo', valueJSONToken);
                                                 MultipleVehicleEWayBill.Reset();
                                                 MultipleVehicleEWayBill.SetRange("LFS Document No. ", PostedTransferShipment."No.");
-                                                if MultipleVehicleEWayBill.FindFirst() then
+                                                if MultipleVehicleEWayBill.FindFirst() then begin
                                                     MultipleVehicleEWayBill."LFS Group No." := valueJSONToken.AsValue().AsInteger();
-                                                MultipleVehicleEWayBill.Modify();
-                                                PostedTransferShipment."LFS E-Way Bill Message".CreateOutStream(OutStream);
-                                                OutStream.WriteText(StrSubstNo(ReturnMsg, Remarks, Status));
-                                                PostedTransferShipment.Modify();
+                                                    Commit();
+                                                    MultipleVehicleEWayBill.Modify();
+                                                end;
+                                                // PostedTransferShipment."LFS E-Way Bill Message".CreateOutStream(OutStream);
+                                                // OutStream.WriteText(StrSubstNo(ReturnMsg, Remarks, Status));
+                                                // PostedTransferShipment.Modify();
                                                 AddVehicleDetailsTransferShipmentDetails(DocumentNo);
                                             end;
                                         end;
@@ -229,7 +231,7 @@ codeunit 73105 "LFS Multiple Vehicle E-WayBill"
         if PostedSalesInvoice.FindFirst() then begin
             GlbTextVars := '';
             GlbTextVars += '{';
-            WriteToGlbTextVar('ACTION', 'CREATEGROUP', 0, TRUE);
+            WriteToGlbTextVar('action', 'CREATEGROUP', 0, TRUE);
             GlbTextVars += '"data" : [';
             MultipleVehicleEWayBill.Reset();
             MultipleVehicleEWayBill.SetRange("LFS Document No. ", InvoiceNo);
@@ -367,7 +369,7 @@ codeunit 73105 "LFS Multiple Vehicle E-WayBill"
         if PostedTransferShipment.FindFirst() then begin
             GlbTextVars := '';
             GlbTextVars += '{';
-            WriteToGlbTextVar('ACTION', 'CREATEGROUP', 0, TRUE);
+            WriteToGlbTextVar('action', 'CREATEGROUP', 0, TRUE);
             GlbTextVars += '"data" : [';
             MultipleVehicleEWayBill.Reset();
             MultipleVehicleEWayBill.SetRange("LFS Document No. ", ShipmentNo);
@@ -380,7 +382,7 @@ codeunit 73105 "LFS Multiple Vehicle E-WayBill"
                     WriteToGlbTextVar('Generator_Gstin', Location."GST Registration No.", 0, TRUE);
                     WriteToGlbTextVar('EwbNo', PostedTransferShipment."E-Way Bill No.", 0, TRUE);
                     WriteToGlbTextVar('Reason', 'First Time', 0, TRUE);
-                    WriteToGlbTextVar('Remarks', 'null', 1, true);
+                    WriteToGlbTextVar('Remarks', PostedTransferShipment."LFS E-Way Bill Remarks", 0, true);
                     Location.Reset();
                     Location.SetRange(Code, PostedTransferShipment."Transfer-from Code");
                     if Location.FindFirst() then begin
@@ -405,16 +407,16 @@ codeunit 73105 "LFS Multiple Vehicle E-WayBill"
                     if PostedTransferShipment."LFS Mode of Transport" <> PostedTransferShipment."LFS Mode of Transport"::"0" then
                         case PostedTransferShipment."LFS Mode of Transport" of
                             PostedTransferShipment."LFS Mode of Transport"::"1":
-                                WriteToGlbTextVar('TransMode', '1', 0, TRUE);
+                                WriteToGlbTextVar('TransportMode', 'Road', 0, TRUE);
                             PostedTransferShipment."LFS Mode of Transport"::"2":
-                                WriteToGlbTextVar('TransMode', '2', 0, TRUE);
+                                WriteToGlbTextVar('TransportMode', 'Rail', 0, TRUE);
                             PostedTransferShipment."LFS Mode of Transport"::"3":
-                                WriteToGlbTextVar('TransMode', '3', 0, TRUE);
+                                WriteToGlbTextVar('TransportMode', 'Air', 0, TRUE);
                             PostedTransferShipment."LFS Mode of Transport"::"4":
-                                WriteToGlbTextVar('TransMode', '4', 0, TRUE);
+                                WriteToGlbTextVar('TransportMode', 'Ship', 0, TRUE);
                         end
                     else
-                        WriteToGlbTextVar('TransMode', 'null', 1, TRUE);
+                        WriteToGlbTextVar('TransportMode', 'null', 1, TRUE);
                     // WriteToGlbTextVar('TransMode', Format(PostedSalesInvoice."LFS Mode of Transport"), 0, true);
 
                     WriteToGlbTextVar('TotalQuantity', Format(MultipleVehicleEWayBill."LFS Total Quantity"), 0, true);
