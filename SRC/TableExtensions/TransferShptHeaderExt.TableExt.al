@@ -11,7 +11,7 @@ tableextension 73105 "LFS Transfer Shpt. Header Ext" extends "Transfer Shipment 
             Caption = 'Mode of Transport';
             DataClassification = CustomerContent;
         }
-        field(73101; "LFS E-Way Bill Date"; DateTime)
+        field(73101; "LFS E-Way Bill Date"; Text[20])
         {
             Caption = 'E-Way Bill Date';
             DataClassification = CustomerContent;

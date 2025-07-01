@@ -207,7 +207,7 @@ codeunit 73100 "E-Way Bill Generation"
                                                     PostedTransferShipment."E-Way Bill No." := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedTransferShipment."E-Way Bill No."));
 
                                                 if JSONObject.Get('EwbDt', valueJSONToken) then
-                                                    PostedTransferShipment."LFS E-Way Bill Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+                                                    PostedTransferShipment."LFS E-Way Bill Date" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedTransferShipment."LFS E-Way Bill Date"));
 
                                                 if JSONObject.Get('EwbValidTill', valueJSONToken) then begin
                                                     JsonValue := valueJSONToken.AsValue();
@@ -466,7 +466,7 @@ codeunit 73100 "E-Way Bill Generation"
     begin
         GSTRegNos.Reset();
         GSTRegNos.Get(GSTRegistrationNo);
-        AuthenticateAPI(GSTRegNos.Code);
+        // AuthenticateAPI(GSTRegNos.Code);
         HttpRequest.Method := 'POST';
         HttpRequest.SetRequestUri(GSTRegNos."LFS E-Way Bill API URL");
         HttpContent.WriteFrom(GlbTextVar);
@@ -507,7 +507,7 @@ codeunit 73100 "E-Way Bill Generation"
                                             Status := JSONToken.AsValue().AsText();
                                             OutStream.WriteText(StrSubstNo(ReturnMsg, Remarks, Status));
                                             Message(StrSubstNo(ReturnMsg, Remarks, Status));
-                                            if Status = 'SUCCESS' then
+                                            if Status = 'Success' then
                                                 SyncEWayBill(DocumentNo);
                                         end;
                                     end else
@@ -527,7 +527,6 @@ codeunit 73100 "E-Way Bill Generation"
         ToLocation: Record Location;
         State: Record State;
         Country: Record "Country/Region";
-        TransportMethod: Record "Transport Method";
         DtldGSTLedgerEntry: Record "Detailed GST Ledger Entry";
         CGSTVal: Decimal;
         IGSTVal: Decimal;
@@ -553,17 +552,19 @@ codeunit 73100 "E-Way Bill Generation"
             ToLocation.Get(PostedTransferShipment."Transfer-to Code");
             GlbTextVars := '';
             GlbTextVars += '{';
-            WriteToGlbTextVar('ACTION', 'INVOICE', 0, TRUE);
+            WriteToGlbTextVar('action', 'INVOICE', 0, TRUE);
             GlbTextVars += '"data" : [';
             GlbTextVars += '{';
             WriteToGlbTextVar('GENERATOR_GSTIN', FromLocation."GST Registration No.", 0, TRUE);
-            WriteToGlbTextVar('TRANSACTION_TYPE', 'Job Work', 0, TRUE);
+            WriteToGlbTextVar('TRANSACTION_TYPE', 'OUTWARD', 0, TRUE);
+            WriteToGlbTextVar('TRANSaction_SUB_TYPE', 'Job Work', 0, true);
+            WriteToGlbTextVar('SUPPLY_TYPE', 'null', 1, true);
+            WriteToGlbTextVar('TRANS_TYPE_DESC', 'null', 1, true);
             WriteToGlbTextVar('DOC_TYPE', 'Delivery Challan', 0, true);
             WriteToGlbTextVar('DOC_NO', PostedTransferShipment."No.", 0, true);
             WriteToGlbTextVar('DOC_DATE', Format(PostedTransferShipment."Posting Date"), 0, true);
             WriteToGlbTextVar('CONSIGNOR_GSTIN_NO', FromLocation."GST Registration No.", 0, true);
             WriteToGlbTextVar('CONSIGNOR_LEGAL_NAME', DELCHR(FromLocation.Name, '=', '~`!@#$%^&*()_-+{}[]|\/:;".,?'), 0, true);
-            WriteToGlbTextVar('SUPPLY_TYPE', 'Regular', 0, true);
             WriteToGlbTextVar('CONSIGNEE_GSTIN_NO', ToLocation."GST Registration No.", 0, TRUE);
             WriteToGlbTextVar('CONSIGNEE_LEGAL_NAME', delchr(ToLocation.Name, '=', '~`!@#$%^&*()_-+{}[]|\/:;".,?'), 0, TRUE);
             WriteToGlbTextVar('SHIP_ADDRESS_LINE1', DELCHR(PostedTransferShipment."Transfer-to Address", '=', '~`!@#$%^&*()_-+{}[]|\/:;".,?'), 0, TRUE);
@@ -573,32 +574,60 @@ codeunit 73100 "E-Way Bill Generation"
             WriteToGlbTextVar('SHIP_PIN_CODE', ToLocation."Post Code", 0, TRUE);
             Country.GET(PostedTransferShipment."Trsf.-to Country/Region Code");
             WriteToGlbTextVar('SHIP_COUNTRY', FORMAT(Country.Name), 0, TRUE);
-            if TransportMethod.GET(PostedTransferShipment."Transport Method") then
-                WriteToGlbTextVar('TRANSPORT_MODE', FORMAT(TransportMethod.Code), 0, TRUE);
-
-            IF ShippingAgent.GET(PostedTransferShipment."Shipping Agent Code") THEN BEGIN
-                WriteToGlbTextVar('TRANSPORTER_NAME', ShippingAgent.Name, 0, TRUE);
-                IF ShippingAgent."GST Registration No." <> '' THEN
-                    WriteToGlbTextVar('TRANSPORTER_ID_GSTIN', ShippingAgent."GST Registration No.", 0, TRUE)
-                ELSE
-                    WriteToGlbTextVar('TRANSPORTER_ID_GSTIN', '', 0, TRUE);
-            END;
             WriteToGlbTextVar('ORIGIN_ADDRESS_LINE1', DELCHR(FromLocation.Address, '=', '~`!@#$%^&*()_-+{}[]|\/:;".,?'), 0, TRUE);
             WriteToGlbTextVar('ORIGIN_CITY_NAME', FromLocation.City, 0, TRUE);
             WriteToGlbTextVar('ORIGIN_PIN_CODE', FromLocation."Post Code", 0, TRUE);
             State.GET(FromLocation."State Code");
             WriteToGlbTextVar('ORIGIN_STATE', State.Description, 0, TRUE);
-            case PostedTransferShipment."Vehicle Type" of
-                PostedTransferShipment."Vehicle Type"::Regular:
-                    WriteToGlbTextVar('VEHICLE_TYPE', FORMAT('Normal'), 0, TRUE);
-                PostedTransferShipment."Vehicle Type"::ODC:
-                    WriteToGlbTextVar('VEHICLE_TYPE', FORMAT('Over Dimensional Cargo'), 0, TRUE);
+            if PostedTransferShipment."LFS Mode of Transport" <> PostedTransferShipment."LFS Mode of Transport"::"0" then
+                // WriteToGlbTextVar('TRANSPORT_MODE', FORMAT(TransportMethod.Code), 0, TRUE)
+                case PostedTransferShipment."LFS Mode of Transport" of
+                    PostedTransferShipment."LFS Mode of Transport"::"1":
+                        WriteToGlbTextVar('TRANSPORT_MODE', 'Road', 0, TRUE);
+                    PostedTransferShipment."LFS Mode of Transport"::"2":
+                        WriteToGlbTextVar('TRANSPORT_MODE', 'Sea', 0, TRUE);
+                    PostedTransferShipment."LFS Mode of Transport"::"3":
+                        WriteToGlbTextVar('TRANSPORT_MODE', 'Air', 0, TRUE);
+                    PostedTransferShipment."LFS Mode of Transport"::"4":
+                        WriteToGlbTextVar('TRANSPORT_MODE', 'Rail', 0, TRUE);
+                end
+            else
+                WriteToGlbTextVar('TRANSPORT_MODE', 'null', 1, TRUE);
+
+            if PostedTransferShipment."Vehicle Type" <> PostedTransferShipment."Vehicle Type"::" " then
+                case PostedTransferShipment."Vehicle Type" of
+                    PostedTransferShipment."Vehicle Type"::Regular:
+                        WriteToGlbTextVar('VEHICLE_TYPE', FORMAT('Normal'), 0, TRUE);
+                    PostedTransferShipment."Vehicle Type"::ODC:
+                        WriteToGlbTextVar('VEHICLE_TYPE', FORMAT('Over Dimensional Cargo'), 0, TRUE);
+                end
+            else
+                WriteToGlbTextVar('VEHICLE_TYPE', 'null', 1, TRUE);
+
+            if PostedTransferShipment."Distance (Km)" <> 0 then
+                WriteToGlbTextVar('APPROXIMATE_DISTANCE', FORMAT(PostedTransferShipment."Distance (Km)"), 1, TRUE)
+            else
+                WriteToGlbTextVar('APPROXIMATE_DISTANCE', '0', 1, TRUE);
+
+            IF ShippingAgent.GET(PostedTransferShipment."Shipping Agent Code") THEN
+                // WriteToGlbTextVar('TRANSPORTER_NAME', ShippingAgent.Name, 0, TRUE);
+                IF ShippingAgent."GST Registration No." <> '' THEN
+                    WriteToGlbTextVar('TRANSPORTER_ID_GSTIN', ShippingAgent."GST Registration No.", 0, TRUE)
+                ELSE
+                    WriteToGlbTextVar('TRANSPORTER_ID_GSTIN', 'null', 1, TRUE);
+
+            if (PostedTransferShipment."LR/RR No." <> '') and (PostedTransferShipment."LR/RR Date" <> 0D) then begin
+                WriteToGlbTextVar('TRANS_DOC_NO', PostedTransferShipment."LR/RR No.", 0, TRUE);
+                WriteToGlbTextVar('TRANS_DOC_DATE', FORMAT(PostedTransferShipment."LR/RR Date", 0, '<Day,2>-<Month Text,3>-<Year4>'), 0, TRUE);
+            end else begin
+                WriteToGlbTextVar('TRANS_DOC_NO', 'null', 1, TRUE);
+                WriteToGlbTextVar('TRANS_DOC_DATE', 'null', 1, TRUE);
             end;
-            WriteToGlbTextVar('APPROXIMATE_DISTANCE', FORMAT(PostedTransferShipment."Distance (Km)"), 1, TRUE);
-            WriteToGlbTextVar('TRANS_DOC_NO', PostedTransferShipment."LR/RR No.", 0, TRUE);
-            WriteToGlbTextVar('TRANS_DOC_DATE', FORMAT(PostedTransferShipment."LR/RR Date", 0, '<Day,2>-<Month Text,3>-<Year4>'), 0, TRUE);
             if PostedTransferShipment."Vehicle No." <> '' then
-                WriteToGlbTextVar('VEHICLE_NO', PostedTransferShipment."Vehicle No.", 0, TRUE);
+                WriteToGlbTextVar('VEHICLE_NO', PostedTransferShipment."Vehicle No.", 0, TRUE)
+            else
+                WriteToGlbTextVar('VEHICLE_NO', 'null', 1, TRUE);
+
             DtldGSTLedgerEntry.Reset();
             DtldGSTLedgerEntry.SetRange("Document No.", PostedTransferShipment."No.");
             DtldGSTLedgerEntry.SetRange("Entry Type", DtldGSTLedgerEntry."Entry Type"::"Initial Entry");
@@ -745,6 +774,7 @@ codeunit 73100 "E-Way Bill Generation"
         GlbTextVarAuth += '}';
         GlbTextVarAuth += ']';
         GlbTextVarAuth += '}';
+        Message(GlbTextVarAuth);
         HttpRequest.Method := 'POST';
         HttpRequest.SetRequestUri(GSTRegNos."LFS E-Way Bill API URL");
         HttpContent.WriteFrom(GlbTextVarAuth);
@@ -779,7 +809,7 @@ codeunit 73100 "E-Way Bill Generation"
                                         JSONObject.Get('EWB_NO', ValueJSONToken);
                                         PostedTransferShipment."E-Way Bill No." := Format(ValueJSONToken.AsValue().AsText());
                                         JSONObject.Get('EWB_DATE', ValueJSONToken);
-                                        PostedTransferShipment."LFS E-Way Bill Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
+                                        PostedTransferShipment."LFS E-Way Bill Date" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(PostedTransferShipment."LFS E-Way Bill Date"));
                                         JSONObject.Get('VALID_UPTO_DATE', ValueJSONToken);
                                         PostedTransferShipment."LFS E-Way Bill Valid Upto Date" := SetEWBDatetimeFromJsonToken(valueJSONToken);
                                         PostedTransferShipment."LFS E-Way Bill Message".CreateOutStream(OSStream);

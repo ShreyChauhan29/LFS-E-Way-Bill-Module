@@ -11,7 +11,7 @@ tableextension 73104 "LFS Transfer Header Ext" extends "Transfer Header"
             Caption = 'Mode of Transport';
             DataClassification = CustomerContent;
         }
-        field(73101; "LFS E-Way Bill Date"; DateTime)
+        field(73101; "LFS E-Way Bill Date"; Text[20])
         {
             Caption = 'E-Way Bill Date';
             DataClassification = CustomerContent;

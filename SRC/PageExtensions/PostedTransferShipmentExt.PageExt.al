@@ -15,6 +15,10 @@ pageextension 73108 "LFSPosted Transfer ShipmentExt" extends "Posted Transfer Sh
                 ToolTip = 'Specifies the value of the LFS Mode of Transport field.', Comment = '%';
             }
         }
+        modify("Shipping Agent Code")
+        {
+            Editable = true;
+        }
         addafter("E-Way Bill No.")
         {
             field("LFS E-Way Bill Date"; Rec."LFS E-Way Bill Date")
