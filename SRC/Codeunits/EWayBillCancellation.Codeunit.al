@@ -12,7 +12,6 @@ codeunit 73104 "LFS E-Way Bill Cancellation"
     var
         GlbTextVars: Text;
 
-
     procedure CancelEwayBill(GlbTextVar: Text; GSTRegistrationNo: Code[20]; DocumentNo: Code[20])
     var
         GSTRegNos: Record "GST Registration Nos.";
