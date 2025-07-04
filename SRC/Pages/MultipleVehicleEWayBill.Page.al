@@ -37,6 +37,10 @@ page 73100 "LFS Multiple Vehicle E-WayBill"
                 {
                     ToolTip = 'Specifies the value of the Group No. field.', Comment = '%';
                 }
+                field("LFS Vehicle Added Date"; Rec."LFS Vehicle Added Date")
+                {
+                    ToolTip = 'Specifies the value of the Vehicle Added Date field.', Comment = '%';
+                }
             }
         }
     }

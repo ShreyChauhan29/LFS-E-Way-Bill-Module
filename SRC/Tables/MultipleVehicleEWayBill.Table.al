@@ -47,15 +47,16 @@ table 73100 "LFS Multiple Vehicle E-WayBill"
             Caption = 'Total Quantity';
             DataClassification = CustomerContent;
         }
-        field(8; "LFS Vehicle Added Date"; DateTime)
+        field(8; "LFS Vehicle Added Date"; Text[20])
         {
             Caption = 'Vehicle Added Date';
             DataClassification = CustomerContent;
+            Editable = false;
         }
     }
     keys
     {
-        key(PK; "LFS Document No. ", "LFS Line No.", "LFS Group No.")
+        key(PK; "LFS Document No. ", "LFS Line No.")
         {
             Clustered = true;
         }

@@ -4,7 +4,7 @@ using Microsoft.Sales.History;
 
 pageextension 73106 "LFSPosted Sales Credit MemoExt" extends "Posted Sales Credit Memo"
 {
-    PromotedActionCategories = 'New, Process, Report, Category4, Category5, Category6, Category7, Category8, Category9, E-Way Bill';
+    PromotedactionCategories = 'New, Process, Report, Category4, Category5, Category6, Category7, Category8, Category9, E-Way Bill';
     layout
     {
         addafter("Distance (Km)")
@@ -92,7 +92,7 @@ pageextension 73106 "LFSPosted Sales Credit MemoExt" extends "Posted Sales Credi
                     PromotedCategory = Category10;
                     PromotedIsBig = true;
 
-                    trigger OnAction()
+                    trigger Onaction()
                     var
                         EInvoiceAPI: Codeunit "E-Way Bill Generation";
                     begin
@@ -111,7 +111,7 @@ pageextension 73106 "LFSPosted Sales Credit MemoExt" extends "Posted Sales Credi
                     PromotedCategory = Category10;
                     PromotedIsBig = true;
                     Image = UpdateDescription;
-                    trigger OnAction()
+                    trigger Onaction()
                     var
                         UpdatePartB: Codeunit "LFS E-Way Bill Update Part-B";
                     begin
@@ -130,7 +130,7 @@ pageextension 73106 "LFSPosted Sales Credit MemoExt" extends "Posted Sales Credi
                     PromotedCategory = Category10;
                     PromotedIsBig = true;
                     Image = UpdateDescription;
-                    trigger OnAction()
+                    trigger Onaction()
                     var
                         UpdateTransporter: Codeunit "LFS EWay Bill Updt Transporter";
                     begin
@@ -151,7 +151,7 @@ pageextension 73106 "LFSPosted Sales Credit MemoExt" extends "Posted Sales Credi
                     PromotedIsBig = true;
                     Visible = false;
 
-                    trigger OnAction()
+                    trigger Onaction()
                     var
                         EInvoiceAPI: Codeunit "E-Way Bill Generation";
                     begin
@@ -168,7 +168,7 @@ pageextension 73106 "LFSPosted Sales Credit MemoExt" extends "Posted Sales Credi
                     PromotedIsBig = true;
                     ToolTip = 'Specifies the Cancel Eway Bill';
                     Caption = 'Cancel E-Way Bill No.';
-                    trigger OnAction()
+                    trigger Onaction()
                     var
                         EWayBillAPI: Codeunit "LFS E-Way Bill Cancellation";
                     begin
@@ -185,7 +185,7 @@ pageextension 73106 "LFSPosted Sales Credit MemoExt" extends "Posted Sales Credi
                     Promoted = true;
                     PromotedCategory = Category10;
                     PromotedIsBig = true;
-                    trigger OnAction()
+                    trigger Onaction()
                     var
                         EWayBillAPI: Codeunit "E-Way Bill Generation";
                     begin
@@ -202,7 +202,7 @@ pageextension 73106 "LFSPosted Sales Credit MemoExt" extends "Posted Sales Credi
                     Promoted = true;
                     PromotedCategory = Category10;
                     PromotedIsBig = true;
-                    trigger OnAction()
+                    trigger Onaction()
                     var
                         EWayBillAPI: Codeunit "LFS Multiple Vehicle E-WayBill";
                     begin
@@ -221,7 +221,7 @@ pageextension 73106 "LFSPosted Sales Credit MemoExt" extends "Posted Sales Credi
                     Promoted = true;
                     PromotedCategory = Category10;
                     PromotedIsBig = true;
-                    trigger OnAction()
+                    trigger Onaction()
                     var
                         EWayBillAPI: Codeunit "LFS Multi Vehicle UpdatePart-B";
                     begin

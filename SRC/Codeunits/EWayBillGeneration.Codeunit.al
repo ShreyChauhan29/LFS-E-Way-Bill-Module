@@ -258,7 +258,7 @@ codeunit 73100 "E-Way Bill Generation"
         if PostedSalesInvoice.FindFirst() then begin
             GlbTextVars := '';
             GlbTextVars += '{';
-            WriteToGlbTextVar('ACTION', 'EWAYBILL', 0, TRUE);
+            WriteToGlbTextVar('action', 'EWAYBILL', 0, TRUE);
             WriteToGlbTextVar('Irn', PostedSalesInvoice."IRN Hash", 0, TRUE);
             WriteToGlbTextVar('Distance', '0', 0, TRUE);
             if PostedSalesInvoice."Vehicle No." <> '' then
@@ -328,7 +328,7 @@ codeunit 73100 "E-Way Bill Generation"
         if PostedSalesCreditMemo.FindFirst() then begin
             GlbTextVars := '';
             GlbTextVars += '{';
-            WriteToGlbTextVar('ACTION', 'EWAYBILL', 0, TRUE);
+            WriteToGlbTextVar('action', 'EWAYBILL', 0, TRUE);
             WriteToGlbTextVar('Irn', PostedSalesCreditMemo."IRN Hash", 0, TRUE);
             WriteToGlbTextVar('Distance', '0', 0, TRUE);
             if PostedSalesCreditMemo."Vehicle No." <> '' then
@@ -389,7 +389,7 @@ codeunit 73100 "E-Way Bill Generation"
         if PostedTransferShipment.FindFirst() then begin
             GlbTextVars := '';
             GlbTextVars += '{';
-            WriteToGlbTextVar('ACTION', 'EWAYBILL', 0, TRUE);
+            WriteToGlbTextVar('action', 'EWAYBILL', 0, TRUE);
             WriteToGlbTextVar('Irn', PostedTransferShipment."IRN Hash", 0, TRUE);
             WriteToGlbTextVar('Distance', '0', 0, TRUE);
             if PostedTransferShipment."Vehicle No." <> '' then
@@ -557,7 +557,7 @@ codeunit 73100 "E-Way Bill Generation"
             GlbTextVars += '"data" : [';
             GlbTextVars += '{';
             WriteToGlbTextVar('GENERATOR_GSTIN', FromLocation."GST Registration No.", 0, TRUE);
-            WriteToGlbTextVar('TRANSACTION_TYPE', 'OUTWARD', 0, TRUE);
+            WriteToGlbTextVar('TRANSaction_TYPE', 'OUTWARD', 0, TRUE);
             WriteToGlbTextVar('TRANSaction_SUB_TYPE', 'Job Work', 0, true);
             WriteToGlbTextVar('SUPPLY_TYPE', 'null', 1, true);
             WriteToGlbTextVar('TRANS_TYPE_DESC', 'null', 1, true);

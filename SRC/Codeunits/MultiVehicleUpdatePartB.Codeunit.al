@@ -34,7 +34,7 @@ codeunit 73106 "LFS Multi Vehicle UpdatePart-B"
         JSONToken: JsonToken;
         ValueJSONToken: JsonToken;
         JSONArray: JsonArray;
-        i: Integer;
+        i, GroupNo : Integer;
         OutStream: OutStream;
     begin
         GSTRegNos.Reset();
@@ -75,13 +75,14 @@ codeunit 73106 "LFS Multi Vehicle UpdatePart-B"
                                             PostedSalesInvoice.Reset();
                                             PostedSalesInvoice.SetRange("No.", DocumentNo);
                                             if PostedSalesInvoice.FindFirst() then begin
-                                                JSONObject.Get('groupNo', valueJSONToken);
+                                                JSONObject.Get('GroupNo', valueJSONToken);
+                                                GroupNo := valueJSONToken.AsValue().AsInteger();
                                                 MultipleVehicleEWayBill.Reset();
                                                 MultipleVehicleEWayBill.SetRange("LFS Document No. ", PostedSalesInvoice."No.");
-                                                MultipleVehicleEWayBill.SetRange("LFS Group No.", valueJSONToken.AsValue().AsInteger());
+                                                MultipleVehicleEWayBill.SetRange("LFS Group No.", GroupNo);
                                                 if MultipleVehicleEWayBill.FindFirst() then begin
                                                     JSONObject.Get('VehicleAddedDate', valueJSONToken);
-                                                    MultipleVehicleEWayBill."LFS Vehicle Added Date" := valueJSONToken.AsValue().AsDateTime();
+                                                    MultipleVehicleEWayBill."LFS Vehicle Added Date" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(MultipleVehicleEWayBill."LFS Vehicle Added Date"));
                                                     MultipleVehicleEWayBill.Modify();
                                                 end;
                                                 PostedSalesInvoice."LFS E-Way Bill Message".CreateOutStream(OutStream);
@@ -92,13 +93,14 @@ codeunit 73106 "LFS Multi Vehicle UpdatePart-B"
                                             PostedTransferShipment.Reset();
                                             PostedTransferShipment.SetRange("No.", DocumentNo);
                                             if PostedTransferShipment.FindFirst() then begin
-                                                JSONObject.Get('groupNo', valueJSONToken);
+                                                JSONObject.Get('GroupNo', valueJSONToken);
+                                                GroupNo := valueJSONToken.AsValue().AsInteger();
                                                 MultipleVehicleEWayBill.Reset();
                                                 MultipleVehicleEWayBill.SetRange("LFS Document No. ", PostedTransferShipment."No.");
-                                                MultipleVehicleEWayBill.SetRange("LFS Group No.", valueJSONToken.AsValue().AsInteger());
+                                                MultipleVehicleEWayBill.SetRange("LFS Group No.", GroupNo);
                                                 if MultipleVehicleEWayBill.FindFirst() then begin
                                                     JSONObject.Get('VehicleAddedDate', valueJSONToken);
-                                                    MultipleVehicleEWayBill."LFS Vehicle Added Date" := valueJSONToken.AsValue().AsDateTime();
+                                                    MultipleVehicleEWayBill."LFS Vehicle Added Date" := CopyStr(valueJSONToken.AsValue().AsText(), 1, MaxStrLen(MultipleVehicleEWayBill."LFS Vehicle Added Date"));
                                                     MultipleVehicleEWayBill.Modify();
                                                 end;
                                                 PostedTransferShipment."LFS E-Way Bill Message".CreateOutStream(OutStream);
@@ -131,7 +133,7 @@ codeunit 73106 "LFS Multi Vehicle UpdatePart-B"
         if PostedSalesInvoice.FindFirst() then begin
             GlbTextVars := '';
             GlbTextVars += '{';
-            WriteToGlbTextVar('ACTION', 'MUTIVEHICLEUPDATE', 0, TRUE);
+            WriteToGlbTextVar('action', 'MUTIVEHICLEUPDATE', 0, TRUE);
             GlbTextVars += '"data" : [';
             MultipleVehicleEWayBill.Reset();
             MultipleVehicleEWayBill.SetRange("LFS Document No. ", InvoiceNo);
@@ -200,7 +202,7 @@ codeunit 73106 "LFS Multi Vehicle UpdatePart-B"
         if PostedTransferShipment.FindFirst() then begin
             GlbTextVars := '';
             GlbTextVars += '{';
-            WriteToGlbTextVar('ACTION', 'MUTIVEHICLEUPDATE', 0, TRUE);
+            WriteToGlbTextVar('action', 'MUTIVEHICLEUPDATE', 0, TRUE);
             GlbTextVars += '"data" : [';
             MultipleVehicleEWayBill.Reset();
             MultipleVehicleEWayBill.SetRange("LFS Document No. ", ShipmentNo);
